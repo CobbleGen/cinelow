@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+    <div class="mega-form">
+        <form action="" method="POST">
+            {{ form.hidden_tag()}}
+            <fieldset>
+                <legend>Log in to Cinelow</legend>
+                {% for category, message in get_flashed_messages(with_categories=True) %}
+                    <div class="alert alert-{{category}}">
+                    <strong>{{ message }}</strong>
+                    </div>
+                {%endfor %}
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-field is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-field") }}
+                    {% endif %}
+                    
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-field is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-field") }}
+                    {% endif %}
+                </div>
+                <div class="form-group check">
+                    {{form.remember(class="checkbox")}}
+                    {{form.remember.label(class="form-label")}}
+                </div>
+            </fieldset>
+            <div>
+                {{ form.submit(class="form-btn button") }}
+            </div>
+        </form>
+    </div>
+    <br />
+    <div>
+        <a>Don't already have an account?</a> <a href="{{url_for('register')}}"> <div class="register-box button"> <p>REGISTER WITH CINELOW</p> <i class="fas fa-greater-than"></i> </div> </a>
+    </div>
+{% endblock %}

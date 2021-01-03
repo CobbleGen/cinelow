@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/moviestyle.css') }}">
+{% endblock %}
+
+{% block title %}{{movie['original_title']}}{% endblock %}
+
+
+{% block content %}
+    <div id="headers">
+        <div id="top-head">
+            <h1>{{movie['original_title']}}</h1>
+            <a>2180 #3</a>
+        </div>
+        <div id="bot-head">
+            <h5>{{movie['release_date']}} | {{movie['runtime']}} mins </h5>
+            <div class="toggle-button disabled" title="Watched?"><i class="fas fa-check"></i></div>
+        </div>
+    </div>
+    <div id="grid-div">
+        <div id="img-div"><img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2{{movie.poster_path}}" alt="{{movie['original_title']}}"></div>
+        <div id="wrapping-box">
+            <div id="description"><p>{{movie.overview}}</p></div>
+            <div id="info">
+                <a>Director{% if directors|length > 1 %}s{% endif %}</a>
+                {% for director in directors %}
+                    {% if director['job'] == 'Director' %}
+                    <div>
+                        <a href="{{url_for('personPage', person_id = director['id'])}}"><h3>{{director['name']}}</h3></a>
+                        <a>#3</a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if writers|length > 0 %}
+                    <a>Writer{% if writers|length > 1 %}s{% endif %}</a>
+                    {% for writer in writers %}
+                        {% if writer['job'] == 'Screenplay' %}
+                            <div>
+                                <a href="{{url_for('personPage', person_id = writer['id'])}}"><h3>{{writer['name']}}</h3></a>
+                                <a>#1</a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div id="genres">
+            <b><p>Genres</p></b>
+            {% for genre in movie['genres'] %}
+                <div class="genre"><a href="#"><h4>{{genre['name']}}</h4></a> <a>1670 #5</a></div>
+            {% endfor %}
+        </div>
+        <div id="cast">
+            <b><p>Actors</p></b>
+            <div id="vert-list">
+                {% for person in cast [:10]%}
+                <div class="row person">
+                    <img src="https://image.tmdb.org/t/p/w138_and_h175_face{{person['profile_path']}}" alt="{{person['name']}}">
+                    <div>
+                        <a href="{{url_for('personPage', person_id = person['id'])}}"><h3>{{person['name']}}</h3></a>
+                        <a>{{person['character']}}</a>
+                    </div>
+                    <a>1508 #2</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

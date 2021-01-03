@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}{% endblock %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://kit.fontawesome.com/15374ab708.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+        <script defer src="{{ url_for('static', filename='scripts/base.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <title>{% block title %}{% endblock %}</title>
+    </head>
+    <body>
+        <nav>
+            <div id="navbar">
+                <div>
+                    <a href="{{url_for('start')}}"><h2>CINELOW</h2></a>
+                    <a style="padding: 5px;" id="menu-bars"><i class="fas fa-bars"></i></a>
+                    <a href="#" id="nav-comp">COMPARE</a>
+                </div>
+                <div>
+                    <form>
+                        <input type="text" placeholder="Search.." id="search" autocomplete="off">
+                        <i class="fa fa-search"></i>
+                    </form>
+                    {% if current_user.is_authenticated %}
+                        <a id="user-drop">
+                            <div>
+                                <img id="user-img" src="{{url_for('static', filename='profilepics/' + current_user.image_file)}}" alt="">{{current_user.username}}<i class="fas fa-caret-down" style="margin-left: 5px; font-size: 1rem;"></i>
+                            </div>
+                        </a>
+                    {% else %}
+                        <a id="sign-in">SIGN IN <i class="fas fa-caret-down"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        <section id="outer-block">
+            <section id="main-block">
+                <div class="hidden-dropdown" id="search-results">
+                </div>
+                <div class="hidden-dropdown" id="user-options-box">
+                    <a href="{{url_for('user', uname = current_user.username)}}"> <div class="item"> <p>VIEW PROFILE</p> </div> </a>
+                    <a href="{{url_for('account')}}"> <div class="item"> <p>ACCOUNT SETTINGS</p> </div> </a>
+                    <a href="{{url_for('logout')}}"> <div class="item"> <p>SIGN OUT</p> </div> </a>
+                </div>
+                <div class="hidden-dropdown" id="sign-in-box">
+                    <a href="{{url_for('login')}}"> <div class="item"> <p>SIGN IN WITH CINELOW</p><i class="fas fa-greater-than"></i> </div> </a>
+                    <a href="#"><div class="item"> <p>SIGN IN WITH GOOGLE</p><i class="fab fa-google"></i> </div> </a>
+                    <a href="#"><div class="item"> <p>SIGN IN WITH FACEBOOK</p><i class="fab fa-facebook"></i> </div> </a>
+                    <a href="{{url_for('register')}}"> <div class="button item register"> <p>REGISTER WITH CINELOW</p><i class="fas fa-greater-than"></i> </div> </a>
+                </div>
+                <div class="hidden-dropdown" id="main-menu">
+                    <a href="#" id="menu-comp"> <div class="item"> <p>COMPARE</p> </div> </a>
+                    <a href="#"> <div class="item"> <p>DISCOVER</p> </div> </a>
+                    <a href="#"> <div class="item"> <p>TOP MOVIES</p> </div> </a>
+                    <a href="#"> <div class="item"> <p>TOP ACTORS</p> </div> </a>
+                    <a href="#"> <div class="item"> <p>TOP DIRECTORS</p> </div> </a>
+                </div>
+
+                {% block content %}
+                {% endblock %}
+            </section>
+        </section>
+    </body>
+</html>

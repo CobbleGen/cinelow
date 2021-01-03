@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/useraccount.css') }}">
+{% endblock %}
+
+{% block title %}My Account{% endblock %}
+
+
+{% block content %}
+
+    <h2>{{current_user.username}}'s Account Info</h2>
+    <form action="" method="POST" enctype="multipart/form-data" id="upload-form">
+        <div id="main-wrapper">
+            <div id="left-section">
+                <label class="custom-picture-upload">
+                    {{ form.picture(class="picture-upload-form") }}
+                    <div id="img-wrapper">
+                        <img id="user-img" src="{{url_for('static', filename='profilepics/' + current_user.image_file)}}" alt="userimg">
+                        <i class="far fa-edit"></i>
+                    </div>
+                </label>
+                <a id="update-text" style="display: none;"></a>
+                <br />
+                {% if form.picture.errors %}
+                    {% for error in form.picture.errors %}
+                        <span class="error-msg">{{error}}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div id="right-section">
+                <div class="mega-form">
+                    {{ form.hidden_tag()}}
+                    <fieldset>
+                        {% for category, message in get_flashed_messages(with_categories=True) %}
+                            <div class="alert alert-{{category}}">
+                            <strong>{{ message }}</strong>
+                            </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            {{ form.username.label(class="form-label") }}
+                            {% if form.username.errors %}
+                                {{ form.username(class="form-field is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.username.errors %}
+                                        <span>{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.username(class="form-field") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.email.label(class="form-label") }}
+                            {% if form.email.errors %}
+                                {{ form.email(class="form-field is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        <span>{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.email(class="form-field") }}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                    <div>
+                        {{ form.submit(class="form-btn button") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

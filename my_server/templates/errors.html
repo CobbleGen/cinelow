@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Error {{ error_num }}{% endblock %}
+
+
+{% block content %}
+    <div style="text-align: center;">
+        <br />
+        <h1>{{ error_num }} {{error_text}}</h1>
+        <a href="{{url_for('start')}}">Back to the homepage?</a>
+    </div>
+    
+{% endblock %}

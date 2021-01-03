@@ -1,0 +1,63 @@
+$c-yellow: #ebd620;
+$hover-yellow: #ac9d1b;
+$sec-bg: #1A1A1A;
+$hover-bg: #242424;
+$prim-bg: #101010;
+$text-gray: #949494;
+$error-red: rgb(255, 68, 68);
+
+
+#img-wrapper {
+    position: relative;
+    border-radius: 50%;
+    height: 250px;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    i {
+        opacity: 0;
+        position: absolute;
+        font-size: 4rem;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    &:hover > img{
+        opacity: 50%;
+    }
+    &:hover > i{
+        opacity: 100%;
+    }
+}
+
+#user-img {
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+    transition: all 0.3s ease;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#main-wrapper {
+    display: flex;
+}
+
+#right-section {
+    width: 100%;
+}
+
+#left-section {
+    padding: 10px;
+}
+
+.error-msg {
+    color: $error-red;
+    font-size: 1rem;
+}

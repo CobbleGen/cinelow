@@ -1,0 +1,94 @@
+#headers {
+    margin-bottom: 15px;
+    #top-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #bot-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h5 {
+            font-size: 2.5rem;
+        }
+    }
+}
+
+#grid-div {
+    display: grid;
+    width: 100%;
+    grid-template-areas: "img-div   img-div description description description description"
+                         "info      info    movies movies movies movies"
+                         ".         .       movies movies movies movies";
+    grid-template-rows:    450px 1fr 500px;
+    grid-template-columns: 150px 130px 1fr 1fr 1fr 1fr;
+    column-gap: 20px;
+
+    #img-div {
+        grid-area: img-div;
+        width: 300px;
+        height: 450px;
+        background-color: #949494;
+        border-radius: 15px;
+
+        img {
+            border-radius: 15px;
+        }
+    }
+    #description {
+        height: fit-content;
+        position: relative;
+        grid-area: description;
+        background-color: #101010;
+        z-index: 5;
+        padding: 10px;
+        p{
+            font-size: 1.25rem;
+        }
+    }
+    #info {
+        padding-top: 15px;
+        grid-area: info;
+        
+        p {
+            font-size: 2.5rem;
+        }
+    }
+    #movies {
+        width: 100%;
+        grid-area: movies;
+        padding-top: 15px;
+        position: relative;
+
+        p {
+            font-size: 2.5rem;
+        }
+        #actors {
+            width: 100%;
+        }
+        .actor {
+            padding: 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            position: relative;
+
+            div {
+                padding-left: 75px;
+            }
+
+            img {
+                width: 70px;
+                height: 70px;
+                object-fit: cover;
+                border-radius: 50%;
+                position: absolute;
+                left: 0;
+            }
+        }
+    }
+}

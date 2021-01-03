@@ -1,0 +1,139 @@
+#headers {
+  margin-bottom: 15px;
+}
+
+#headers #top-head {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#headers #bot-head {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#headers #bot-head h5 {
+  font-size: 2.5rem;
+}
+
+#grid-div {
+  display: -ms-grid;
+  display: grid;
+  width: 100%;
+      grid-template-areas: "img-div   img-div description description description description" "info      info    movies movies movies movies" ".         .       movies movies movies movies";
+  -ms-grid-rows: 450px 1fr 500px;
+      grid-template-rows: 450px 1fr 500px;
+  -ms-grid-columns: 150px 130px 1fr 1fr 1fr 1fr;
+      grid-template-columns: 150px 130px 1fr 1fr 1fr 1fr;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+}
+
+#grid-div #img-div {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: img-div;
+  width: 300px;
+  height: 450px;
+  background-color: #949494;
+  border-radius: 15px;
+}
+
+#grid-div #img-div img {
+  border-radius: 15px;
+}
+
+#grid-div #description {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  position: relative;
+  -ms-grid-row: 1;
+  -ms-grid-column: 3;
+  -ms-grid-column-span: 4;
+  grid-area: description;
+  background-color: #101010;
+  z-index: 5;
+  padding: 10px;
+}
+
+#grid-div #description p {
+  font-size: 1.25rem;
+}
+
+#grid-div #info {
+  padding-top: 15px;
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: info;
+}
+
+#grid-div #info p {
+  font-size: 2.5rem;
+}
+
+#grid-div #movies {
+  width: 100%;
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 2;
+  -ms-grid-column: 3;
+  -ms-grid-column-span: 4;
+  grid-area: movies;
+  padding-top: 15px;
+  position: relative;
+}
+
+#grid-div #movies p {
+  font-size: 2.5rem;
+}
+
+#grid-div #movies #actors {
+  width: 100%;
+}
+
+#grid-div #movies .actor {
+  padding: 10px;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  position: relative;
+}
+
+#grid-div #movies .actor div {
+  padding-left: 75px;
+}
+
+#grid-div #movies .actor img {
+  width: 70px;
+  height: 70px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+}
+/*# sourceMappingURL=personstyle.css.map */

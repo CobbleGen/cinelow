@@ -1,0 +1,120 @@
+#headers {
+  margin-bottom: 15px;
+}
+
+#headers #top-head {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 15px;
+}
+
+#headers #bot-head {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#grid-div {
+  display: -ms-grid;
+  display: grid;
+  width: 100%;
+      grid-template-areas: "img-div   img-div wra-box" "genres    genres  cast" ".         .       cast";
+  -ms-grid-rows: 450px 1fr 500px;
+      grid-template-rows: 450px 1fr 500px;
+  -ms-grid-columns: 150px 130px 4fr;
+      grid-template-columns: 150px 130px 4fr;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+}
+
+#grid-div #img-div {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: img-div;
+  width: 300px;
+  height: 450px;
+  background-color: #949494;
+  border-radius: 15px;
+}
+
+#grid-div #img-div img {
+  border-radius: 15px;
+}
+
+#grid-div #wrapping-box {
+  -ms-grid-row: 1;
+  -ms-grid-column: 3;
+  grid-area: wra-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#grid-div #wrapping-box #description p {
+  font-size: 1.5rem;
+}
+
+#grid-div #wrapping-box #info div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#grid-div #genres {
+  padding-top: 15px;
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: genres;
+}
+
+#grid-div #genres p {
+  font-size: 2.5rem;
+}
+
+#grid-div #genres .genre {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#grid-div #cast {
+  width: 100%;
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 2;
+  -ms-grid-column: 3;
+  grid-area: cast;
+  padding-top: 15px;
+}
+
+#grid-div #cast p {
+  font-size: 2.5rem;
+}
+/*# sourceMappingURL=moviestyle.css.map */

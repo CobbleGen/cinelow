@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/useraccount.css') }}">
+{% endblock %}
+
+{% block title %}{{user.username}}{% endblock %}
+
+
+{% block content %}
+    <h2>{{user.username}}</h2>
+    <img id="user-img" src="{{url_for('static', filename='profilepics/' + user.image_file)}}" alt="userimg">
+{% endblock %}

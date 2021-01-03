@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+    <div class="mega-form">
+        <form action="" method="POST">
+            {{ form.hidden_tag()}}
+            <fieldset>
+                <legend>Sign up</legend>
+                {% for category, message in get_flashed_messages(with_categories=True) %}
+                    <div class="alert alert-{{category}}">
+                    <strong>{{ message }}</strong>
+                    </div>
+                {%endfor %}
+                <div class="form-group">
+                    {{ form.username.label(class="form-label") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-field is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-field") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-field is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-field") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-field is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-field") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    {% if form.confirm_password.errors %}
+                        {{ form.confirm_password(class="form-field is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.confirm_password(class="form-field") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div>
+                {{ form.submit(class="form-btn button") }}
+            </div>
+        </form>
+    </div>
+    <div>
+        <h4>Already have an account?<a href="{{url_for('login')}}"> Sign in here. </a></h4>
+    </div>
+{% endblock %}
