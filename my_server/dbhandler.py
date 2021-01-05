@@ -1,16 +1,13 @@
 from my_server import db, login_manager, app
 from flask_login import UserMixin, current_user
+from sqlalchemy.orm import relationship
+import requests
+import json
 from PIL import Image
 import secrets
 import os
 
-class Movie(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), nullable = False)
-    score = db.Column(db.Integer, nullable = False)
-
-    def __repr__(self):
-        return f'Movie: {self.name}'
+tmdb_key = 'db254eee52d0c8fbc70d51368cd24644'
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,6 +18,27 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f'User: {self.username}'
+
+class Movie(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), nullable = False)
+    categories = relationship("Association", back_populates="movie")
+
+    def __repr__(self):
+        return f'Movie: {self.name}'
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(25))
+    movies = relationship("Association", back_populates="category")
+
+class Association(db.Model):
+    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), primary_key=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), primary_key=True)
+    score = db.Column(db.Integer)
+    votes = db.Column(db.Integer)
+    category = relationship("Category", back_populates="movies")
+    movie = relationship("Movie", back_populates="categories")
 
 def resetDB():
     db.drop_all()
@@ -70,3 +88,31 @@ def save_picture(form_picture):
     i.save(picture_path)
     current_user.image_file = picture_name
     
+
+def add_movie(id):
+    respons = requests.get('http://api.themoviedb.org/3/movie/' + str(id) + '?api_key=' + tmdb_key)
+    if respons.status_code != 200:
+        return None
+    movie = json.loads(respons.text)
+    genres = movie['genres']
+    categories = []
+    for genre in genres:
+        cate = Category.query.filter_by(id=genre['id']).first()
+        if cate is None:
+            cate = add_category(genre['id'], genre['name'])
+        categories.append(cate)
+    m = Movie(id = movie['id'], name = movie['original_title'])
+    a = Association(score=700, votes=0)
+    a.movie = m
+    for category in categories:
+        category.movies.append(a)
+    db.session.add(m)
+    db.session.add(a)
+    db.session.commit()
+    
+
+def add_category(id, name):
+    new = Category(id = id, name = name)
+    db.session.add(new)
+    db.session.commit()
+    return new

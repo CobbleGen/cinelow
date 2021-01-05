@@ -102,6 +102,9 @@ def account():
     if form.validate_on_submit():
         if form.picture.data:
             dbhandler.save_picture(form.picture.data)
+        if form.new_password.data:
+            hashed_pw = bcrypt.hashpw(form.new_password.data.encode('UTF-8'), bcrypt.gensalt())
+            current_user.password = hashed_pw
         current_user.username = form.username.data
         current_user.email = form.email.data
         dbhandler.commitDB()

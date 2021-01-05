@@ -63,6 +63,33 @@
                                 {{ form.email(class="form-field") }}
                             {% endif %}
                         </div>
+                        <br /> <br />
+                        <h3>Update Password</h3>
+                        <div class="form-group">
+                            {{ form.current_password.label(class="form-label") }}
+                            {% if form.current_password.errors %}
+                                {{ form.current_password(class="form-field is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.current_password.errors %}
+                                        <span>{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.current_password(class="form-field") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.new_password.label(class="form-label") }}
+                            {% if form.new_password.errors %}
+                                {{ form.new_password(class="form-field is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.new_password.errors %}
+                                        <span>{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.new_password(class="form-field") }}
+                            {% endif %}
                     </fieldset>
                     <div>
                         {{ form.submit(class="form-btn button") }}

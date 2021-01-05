@@ -3,6 +3,10 @@
   padding: 0;
 }
 
+html {
+  font-size: 80%;
+}
+
 h1 {
   color: #ebd620;
   font-size: 4rem;
@@ -171,7 +175,7 @@ nav form input[type=text] {
   font-family: Roboto;
   border: none;
   position: relative;
-  width: 25rem;
+  width: 30rem;
   border-radius: 15px;
   outline: none;
   -webkit-transition: all 0.4s ease;
@@ -179,7 +183,7 @@ nav form input[type=text] {
 }
 
 nav form input[type=text]:focus {
-  width: 35rem;
+  width: 40rem;
 }
 
 nav form i {
@@ -358,7 +362,7 @@ nav form i {
 }
 
 #main-block #user-options-box {
-  width: 13rem;
+  width: 18rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -588,6 +592,7 @@ nav form i {
   border-radius: 10px;
   border: none;
   outline: none;
+  max-width: 40rem;
 }
 
 .mega-form .check {
@@ -671,9 +676,6 @@ nav form i {
   nav #navbar {
     width: 1100px;
   }
-  nav form input[type=text]:focus {
-    width: 30rem;
-  }
   #main-block {
     width: 1050px;
   }
@@ -687,10 +689,10 @@ nav form i {
     display: none;
   }
   nav form input[type=text] {
-    width: 15rem;
+    width: 20rem;
   }
   nav form input[type=text]:focus {
-    width: 15rem;
+    width: 25rem;
   }
   #main-block {
     width: 750px;

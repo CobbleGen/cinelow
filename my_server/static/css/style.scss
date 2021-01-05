@@ -11,6 +11,10 @@
     padding: 0;
 }
 
+html {
+    font-size: 80%;
+}
+
 h1 {
     color: $c-yellow;
     font-size: 4rem;
@@ -140,14 +144,14 @@ nav {
             font-family: Roboto;
             border: none;
             position: relative;
-            width: 25rem;
+            width: 30rem;
             border-radius: 15px;
             outline: none;
             transition: all 0.4s ease;
         }
 
         input[type=text]:focus {
-            width: 35rem;
+            width: 40rem;
         }
 
         i {
@@ -296,7 +300,7 @@ nav {
     }
 
     #user-options-box {
-        width: 13rem;
+        width: 18rem;
         display: flex;
         flex-direction: column;
         margin-right: -4%;
@@ -478,6 +482,7 @@ nav {
             border-radius: 10px;
             border: none;
             outline: none;
+            max-width: 40rem;
         }
     }
 
@@ -558,11 +563,6 @@ nav {
         #navbar {
             width: 1100px;
         }
-        form {
-            input[type=text]:focus {
-                width: 30rem;
-            }
-        }
     }
     #main-block {
         width: 1050px;
@@ -580,11 +580,11 @@ nav {
         }
         form {
             input[type=text] {
-                width: 15rem;
+                width: 20rem;
             }
     
             input[type=text]:focus {
-                width: 15rem;
+                width: 25rem;
             }
         }
     }
