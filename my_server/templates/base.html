@@ -4,6 +4,7 @@
         {% block head %}{% endblock %}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
         <script src="https://kit.fontawesome.com/15374ab708.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -16,7 +17,7 @@
         <nav>
             <div id="navbar">
                 <div>
-                    <a href="{{url_for('start')}}"><h2>CINELOW</h2></a>
+                    <a href="{{url_for('start')}}"><img id="logo" src="{{ url_for('static', filename='images/cinelow_text.png') }}" alt="icon"></a>
                     <a style="padding: 5px;" id="menu-bars"><i class="fas fa-bars"></i></a>
                     <a href="#" id="nav-comp">COMPARE</a>
                 </div>

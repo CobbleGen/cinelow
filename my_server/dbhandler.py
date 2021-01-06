@@ -95,19 +95,17 @@ def add_movie(id):
         return None
     movie = json.loads(respons.text)
     genres = movie['genres']
-    categories = []
+    m = Movie(id = movie['id'], name = movie['original_title'])
     for genre in genres:
         cate = Category.query.filter_by(id=genre['id']).first()
         if cate is None:
             cate = add_category(genre['id'], genre['name'])
-        categories.append(cate)
-    m = Movie(id = movie['id'], name = movie['original_title'])
-    a = Association(score=700, votes=0)
-    a.movie = m
-    for category in categories:
-        category.movies.append(a)
+        a = Association(score=700, votes=0)
+        a.movie = m
+        a.category = cate
+        cate.movies.append(a)
+        db.session.add(a)
     db.session.add(m)
-    db.session.add(a)
     db.session.commit()
     
 

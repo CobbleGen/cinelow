@@ -8,5 +8,8 @@ app.config.from_object(Config)
 db = flask_sqlalchemy.SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-from my_server import routes, errors
 
+from my_server import errors
+from my_server.main.routes import main
+from my_server.users.routes import users
+from my_server.people_movies.routes import people_movies

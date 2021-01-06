@@ -126,12 +126,18 @@ nav #navbar div {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  align-items: center;
 }
 
-nav #navbar div img {
+nav #navbar div #user-img {
   width: 32px;
   height: 32px;
   border-radius: 50%;
+}
+
+nav #navbar div #logo {
+  margin-top: 7px;
+  height: 50px;
 }
 
 nav #navbar div > * {
