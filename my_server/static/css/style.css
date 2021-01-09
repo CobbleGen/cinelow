@@ -213,7 +213,6 @@ nav form i {
 #main-block {
   position: relative;
   width: 1100px;
-  height: 100vh;
   margin-top: 30px;
 }
 
@@ -655,6 +654,36 @@ nav form i {
 
 .button:hover:hover > p {
   color: #494949;
+}
+
+#poster-boxes {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+#poster-boxes .movie-box {
+  width: 40%;
+  border: 3px rgba(128, 128, 128, 0) solid;
+  border-radius: 5px;
+  -webkit-transition: border-color 0.5s ease;
+  transition: border-color 0.5s ease;
+}
+
+#poster-boxes .movie-box:hover {
+  cursor: pointer;
+  border-color: #ebd620;
+}
+
+#poster-boxes .movie-box img {
+  width: 100%;
+  height: 100%;
 }
 
 .alert {

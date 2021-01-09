@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script defer src="{{ url_for('static', filename='scripts/compare.js') }}"></script>
+{% endblock %}
+
+{% block title %}Comparing Movies{% endblock %}
+
+
+{% block content %}
+    <section>
+        <div id="poster-boxes">
+            <div class="movie-box" id="movie1-box"></div>
+            <div class="movie-box" id="movie2-box"></div>
+        </div>
+    </section>
+    
+{% endblock %}

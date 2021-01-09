@@ -1,5 +1,5 @@
 from my_server import app
-from my_server import dbhandler as dbh
+from my_server.database import dbhandler as dbh, pers_movie_dbf as pmf
 from flask import Blueprint, request, url_for, redirect, render_template, abort
 import requests
 import json
@@ -44,3 +44,26 @@ def personPage(person_id = None):
     movies = credits['cast']
     movies.sort(key=lambda x: x.get('popularity'), reverse=True)
     return render_template('person.html', person = person_data, movies = movies)
+
+
+@app.route('/compare')
+def compare():
+    return render_template('compare.html')
+
+@app.route('/_getmovies')
+def getMovs():
+    movies = {
+        'm1' : pmf.get_random_movie().id,
+        'm2' : pmf.get_random_movie().id
+    }
+    out = json.dumps(movies)   
+    return out
+
+@app.route('/_vote_for_movie', methods=['GET', 'POST'])
+def voteMovie():
+    wid = request.form['winning_id']
+    lid = request.form['losing_id']
+    print('hi')
+    pmf.vote_for(wid, lid)
+    print(f'voted for: {id}')
+    return 'Success'

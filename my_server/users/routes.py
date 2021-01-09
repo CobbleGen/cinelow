@@ -1,5 +1,5 @@
 from my_server import app
-from my_server import dbhandler as dbh
+from my_server.database import dbhandler as dbh, user_dbf as uf
 from flask import Blueprint, request, url_for, flash, redirect, session, render_template, abort
 from my_server.forms import SignupForm, LoginForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required
@@ -13,7 +13,7 @@ def login():
         return redirect(url_for('start'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = dbh.getUserByEmail(form.email.data)
+        user = uf.getUserByEmail(form.email.data)
         if user == None:
             flash(f'No user could be found with that email.', 'warning')
         elif bcrypt.checkpw(form.password.data.encode('UTF-8'), user.password):
@@ -35,13 +35,13 @@ def register():
         return redirect(url_for('start'))
     form = SignupForm()
     if form.validate_on_submit():
-        if dbh.usernameExists(form.username.data):
+        if uf.getUserByUname(form.username.data):
             flash(f'User {form.username.data} already exists.', 'warning')
-        elif dbh.emailExists(form.email.data):
+        elif uf.getUserByEmail(form.email.data):
             flash(f'That email is already being used.', 'warning')
         else:
             hashed_pw = bcrypt.hashpw(form.password.data.encode('UTF-8'), bcrypt.gensalt())
-            dbh.createUser(form.username.data, form.email.data, hashed_pw)
+            uf.createUser(form.username.data, form.email.data, hashed_pw)
             flash(f'Account created for {form.username.data}!', 'success')
             return redirect(url_for('login'))
     return render_template('register.html', form=form)
@@ -50,7 +50,7 @@ def register():
 def user(uname=None):
     if uname == None:
         abort(404)
-    user = dbh.getUserByUname(uname)
+    user = uf.getUserByUname(uname)
     return render_template('user.html', user = user)
 
 @app.route('/account', methods=["POST", "GET"])
@@ -59,7 +59,7 @@ def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
-            dbh.save_picture(form.picture.data)
+            uf.save_picture(form.picture.data)
         if form.new_password.data:
             hashed_pw = bcrypt.hashpw(form.new_password.data.encode('UTF-8'), bcrypt.gensalt())
             current_user.password = hashed_pw

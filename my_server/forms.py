@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from my_server import dbhandler
+from my_server.database import user_dbf as uf
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional
 from wtforms_validators import NotEqualTo
@@ -31,12 +31,12 @@ class UpdateAccountForm(FlaskForm):
 
     def validate_username(self, username):
         if username.data != current_user.username:
-            if dbhandler.usernameExists(username.data):
+            if uf.getUserByUname(username.data):
                 raise ValidationError('That username is taken.')
 
     def validate_email(self, email):
         if email.data != current_user.email:
-            if dbhandler.emailExists(email.data):
+            if uf.getUserByEmail(email.data):
                 raise ValidationError('That email is already being used.')
 
     def validate_current_password(self, current_password):

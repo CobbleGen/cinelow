@@ -19,7 +19,7 @@
                 <div>
                     <a href="{{url_for('start')}}"><img id="logo" src="{{ url_for('static', filename='images/cinelow_text.png') }}" alt="icon"></a>
                     <a style="padding: 5px;" id="menu-bars"><i class="fas fa-bars"></i></a>
-                    <a href="#" id="nav-comp">COMPARE</a>
+                    <a href="{{url_for('compare')}}" id="nav-comp">COMPARE</a>
                 </div>
                 <div>
                     <form>
@@ -54,7 +54,7 @@
                     <a href="{{url_for('register')}}"> <div class="button item register"> <p>REGISTER WITH CINELOW</p><i class="fas fa-greater-than"></i> </div> </a>
                 </div>
                 <div class="hidden-dropdown" id="main-menu">
-                    <a href="#" id="menu-comp"> <div class="item"> <p>COMPARE</p> </div> </a>
+                    <a href="{{url_for('compare')}}" id="menu-comp"> <div class="item"> <p>COMPARE</p> </div> </a>
                     <a href="#"> <div class="item"> <p>DISCOVER</p> </div> </a>
                     <a href="#"> <div class="item"> <p>TOP MOVIES</p> </div> </a>
                     <a href="#"> <div class="item"> <p>TOP ACTORS</p> </div> </a>
