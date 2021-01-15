@@ -28,16 +28,8 @@
         </div>
         <div id="movies">
             <b><p>Movies</p></b>
-            <div id="vert-list">
-                {% for movie in movies [:10]%}
-                <div class="row movie">
-                    <img src="https://image.tmdb.org/t/p/w138_and_h175_face{{movie['poster_path']}}" alt="{{movie['original_title']}}">
-                    <div>
-                        <a href="{{url_for('moviePage', movie_id = movie['id'])}}"><h3>{{movie['original_title']}}</h3></a>
-                    </div>
-                    <a>1508 #2</a>
-                </div>
-                {% endfor %}
+            <div class="vert-list movie-list" data-type="person" data-id="{{person['id']}}" data-amount="10" data-show_score="1">
+
             </div>
         </div>
     </div>

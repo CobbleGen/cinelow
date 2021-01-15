@@ -11,7 +11,7 @@
     <div id="headers">
         <div id="top-head">
             <h1>{{movie['original_title']}}</h1>
-            <a>2180 #3</a>
+            <a>{% if scores['categories'] | length > 0%} {{ scores['categories'][0].score | int}} {% else %} N/A {% endif %}</a>
         </div>
         <div id="bot-head">
             <h5>{{movie['release_date']}} | {{movie['runtime']}} mins </h5>
@@ -26,9 +26,16 @@
                 <a>Director{% if directors|length > 1 %}s{% endif %}</a>
                 {% for director in directors %}
                     {% if director['job'] == 'Director' %}
-                    <div>
-                        <a href="{{url_for('personPage', person_id = director['id'])}}"><h3>{{director['name']}}</h3></a>
-                        <a>#3</a>
+                        <div>
+                            <a href="{{url_for('personPage', person_id = director['id'])}}"><h3>{{director['name']}}</h3></a>
+                            <a class="tooltip">
+                                {% if director['id'] in scores['people'] %}
+                                    {{ scores['people'][director['id']].score | int }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                                <span class="tooltiptext">Tooltip text lorem ipsupm fucking folodoor</span>
+                            </a>
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -38,7 +45,13 @@
                         {% if writer['job'] == 'Screenplay' %}
                             <div>
                                 <a href="{{url_for('personPage', person_id = writer['id'])}}"><h3>{{writer['name']}}</h3></a>
-                                <a>#1</a>
+                                <a>
+                                    {% if writer['id'] in scores['people'] %}
+                                        {{ scores['people'][writer['id']].score | int }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}    
+                                </a>
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -53,15 +66,20 @@
         </div>
         <div id="cast">
             <b><p>Actors</p></b>
-            <div id="vert-list">
-                {% for person in cast [:10]%}
+            <div class="vert-list">
+                {% for person in cast [:10] %}
                 <div class="row person">
                     <img src="https://image.tmdb.org/t/p/w138_and_h175_face{{person['profile_path']}}" alt="{{person['name']}}">
                     <div>
                         <a href="{{url_for('personPage', person_id = person['id'])}}"><h3>{{person['name']}}</h3></a>
                         <a>{{person['character']}}</a>
                     </div>
-                    <a>1508 #2</a>
+                    <a>{% if person['id'] in scores['people'] %}
+                            {{ scores['people'][person['id']].score | int }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </a>
                 </div>
                 {% endfor %}
             </div>

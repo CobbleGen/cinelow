@@ -80,7 +80,6 @@ $("#search").keyup(function (e) {
                             if (index2 >= arr2.length || index1 >= arr1.length) {
                                 break;
                             }
-                            console.log(arr1[index1].popularity + " > " + arr2[index2].popularity);
                             if(arr1[index1].popularity > arr2[index2].popularity) {
                                 merged[current] = arr1[index1];
                                 index1++;
@@ -151,7 +150,7 @@ $(".toggle-button").click(function () {
 
 //"See more" text rutor
 $(".collapse-text").each( function(event) {   //Expands selection
-    const max_length = 1000;
+    const max_length = 2000;
     if( $(this).html().length > max_length ) {
 
         // Selects text up to your limit
@@ -186,3 +185,60 @@ $(".collapse-text").each( function(event) {   //Expands selection
         });
     }
 }); 
+
+function showScore(score, count, show) {
+    score = Math.round(score);
+    count += 1;
+    switch (show) {
+        case 1:
+            return `#${count}`;
+            break;
+        case 2:
+            return score;
+            break;
+        case 3:
+            return `${score} #${count}`;
+            break;
+        default:
+            return "";
+            break;
+    }
+}
+
+function movieLists() {
+    $(".movie-list").each(function() {
+        list = $(this);
+        type = list.data("type");
+        data_id = list.data("id");
+        amount = list.data("amount");
+        show = list.data("show_score");
+        $.ajax({
+            type: "GET",
+            url: "/_get_top_list",
+            dataType: "json",
+            data: {
+                type    : type,
+                data_id : data_id,
+                amount  : amount
+            },
+            success: function (response) {
+                movies = response.movies;
+                for (let i = 0; i < movies.length; i++) {
+                    const e = movies[i];
+                    list.append(`
+                        <div class="row movie">
+                            <img src="https://image.tmdb.org/t/p/w138_and_h175_face${e[0].poster_path}" alt="${e[0].original_title}">
+                            <div>
+                                <a href="/m/${e[0].id}"><h3>${e[0].original_title}</h3></a>
+                            </div>
+                            <a class="tooltip">${showScore(e[1], i, show)}
+                            <span class="tooltiptext">#${i+1} in <i>${response.category} movies</i>, with a <i>${response.category} movie</i> score of ${Math.round(e[1])}</span>
+                            </a>
+                        </div>
+                    `)
+                }
+            }
+        });
+    });
+}
+movieLists()

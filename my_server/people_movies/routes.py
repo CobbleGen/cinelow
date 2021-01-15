@@ -3,6 +3,8 @@ from my_server.database import dbhandler as dbh, pers_movie_dbf as pmf
 from flask import Blueprint, request, url_for, redirect, render_template, abort
 import requests
 import json
+from itertools import islice
+
 
 people_movies = Blueprint('people_movies', __name__)
 
@@ -28,7 +30,12 @@ def moviePage(movie_id = None):
         elif person['job'] == 'Screenplay':
             writers.append(person)
     
-    return render_template('movie.html', movie = movie_data, directors = directors, writers = writers, cast = cast)
+    scores = {
+        'categories'    : pmf.get_movie_categories(movie_id),
+        'people'        : pmf.get_movie_people(movie_id)
+        }
+    print(scores)
+    return render_template('movie.html', movie = movie_data, scores = scores, cast = cast, directors = directors, writers = writers)
     
 
 @app.route('/p/<person_id>')
@@ -39,31 +46,51 @@ def personPage(person_id = None):
     if respons.status_code != 200:
         abort(404)
     person_data = json.loads(respons.text)
-    respons = requests.get('http://api.themoviedb.org/3/person/' + person_id + '/movie_credits?api_key=' + tmdb_key)
-    credits = respons.json()
-    movies = credits['cast']
-    movies.sort(key=lambda x: x.get('popularity'), reverse=True)
-    return render_template('person.html', person = person_data, movies = movies)
+    #respons = requests.get('http://api.themoviedb.org/3/person/' + person_id + '/movie_credits?api_key=' + tmdb_key)
+    #credits = respons.json()
+    #movies = credits['cast']
+    #movies.sort(key=lambda x: x.get('popularity'), reverse=True)
+    return render_template('person.html', person = person_data)
 
 
 @app.route('/compare')
 def compare():
     return render_template('compare.html')
 
+@app.route('/toplist')
+def toplist():
+    return render_template('toplist.html')
+
 @app.route('/_getmovies')
 def getMovs():
+    m1 = pmf.get_random_movie().id
     movies = {
-        'm1' : pmf.get_random_movie().id,
-        'm2' : pmf.get_random_movie().id
+        'm1' : m1,
+        'm2' : pmf.get_random_movie(m1).id
     }
     out = json.dumps(movies)   
     return out
+
+@app.route('/_get_top_list')
+def getTopList():
+    data_id = int(request.args['data_id'])
+    max_amount = int(request.args['amount'])
+    if request.args['type'] == 'person':
+        movies = pmf.get_top_movies_by_person(data_id)
+        category = pmf.get_person(data_id).name
+    else:
+        movies = pmf.get_top_movies_by_category(data_id)
+        category = pmf.get_category(data_id).name
+    movie_list = []
+    for movie in islice(movies, max_amount):
+        respons = requests.get('http://api.themoviedb.org/3/movie/' + str(movie.movie_id) + '?api_key=' + tmdb_key)
+        movie_data = json.loads(respons.text)
+        movie_list.append((movie_data, movie.score))
+    return {'category': category, 'movies': movie_list}
 
 @app.route('/_vote_for_movie', methods=['GET', 'POST'])
 def voteMovie():
     wid = request.form['winning_id']
     lid = request.form['losing_id']
-    print('hi')
     pmf.vote_for(wid, lid)
-    print(f'voted for: {id}')
     return 'Success'

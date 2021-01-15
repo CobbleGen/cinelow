@@ -504,12 +504,12 @@ nav form i {
   color: #ebd620;
 }
 
-#vert-list {
+.vert-list {
   width: 100%;
 }
 
-#vert-list .row {
-  padding: 10px;
+.vert-list .row {
+  padding: 15px;
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -527,16 +527,16 @@ nav form i {
           align-items: center;
 }
 
-#vert-list .row div {
+.vert-list .row div {
   padding-left: 75px;
 }
 
-#vert-list .row img {
+.vert-list .row img {
   position: absolute;
   left: 0;
 }
 
-#vert-list .person img {
+.vert-list .person img {
   width: 70px;
   height: 70px;
   -o-object-fit: cover;
@@ -544,12 +544,12 @@ nav form i {
   border-radius: 50%;
 }
 
-#vert-list .movie {
+.vert-list .movie {
   margin-bottom: 50px;
   margin-top: 30px;
 }
 
-#vert-list .movie img {
+.vert-list .movie img {
   width: 70px;
   height: 100px;
   border-radius: 5px;
@@ -684,6 +684,47 @@ nav form i {
 #poster-boxes .movie-box img {
   width: 100%;
   height: 100%;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  padding: 10px;
+  font-size: 1.25rem;
+  opacity: 0;
+  visibility: hidden;
+  width: 300px;
+  background-color: #1A1A1A;
+  color: #949494;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 120%;
+  left: 50%;
+  margin-left: -150px;
+  -webkit-transition: visibility 0.3s ease, opacity 0.3s ease;
+  transition: visibility 0.3s ease, opacity 0.3s ease;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1A1A1A transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 100%;
 }
 
 .alert {
