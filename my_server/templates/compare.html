@@ -9,9 +9,19 @@
 
 {% block content %}
     <section>
+        <div id="compare-title">
+            <h1>Which is better?  </h1> <i id="q-icon" class="far fa-question-circle tooltip"><span id="common-tt" class="tooltiptext tooltip-bot"></span></i>
+        </div>
         <div id="poster-boxes">
-            <div class="movie-box" id="movie1-box"></div>
-            <div class="movie-box" id="movie2-box"></div>
+            <div class="movie">
+                <div class="movie-box" id="movie1-box"></div>
+                <h2 class="movie-name" id="name1"></h2>
+            </div>
+            <div id="vs-box"><h1>VS</h1></div>
+            <div class="movie">
+                <div class="movie-box" id="movie2-box"></div>
+                <h2 class="movie-name" id="name2"></h2>
+            </div>
         </div>
     </section>
     

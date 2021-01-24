@@ -2,22 +2,22 @@ const tmdb_key = "db254eee52d0c8fbc70d51368cd24644";
 const poster_path = "https://image.tmdb.org/t/p/w94_and_h141_bestv2";
 let timeout = null;
 
-$("#search-results").hide();
-$("#sign-in-box").hide();
-$("#user-options-box").hide();
-$("#main-menu").hide();
-
 $("#sign-in").click(function (e) { 
     e.preventDefault();
-    $("#sign-in-box").slideToggle();
+    $("#sign-in-box").slideDown().focus();
 });
 $("#user-drop").click(function (e) { 
     e.preventDefault();
-    $("#user-options-box").slideToggle();
+    $("#user-options-box").slideDown().focus();
 });
-$("#menu-bars").click(function (e) { 
+$("#menu-bars").mousedown(function (e) { 
     e.preventDefault();
-    $("#main-menu").slideToggle();
+    $("#main-menu").slideDown().focus();
+});
+$(".hidden-dropdown").on("blur", function(e) {
+    setTimeout(() => {
+        $(this).slideUp();
+    }, 100);
 });
 
 $(".picture-upload-form").change(function (e) { 
@@ -133,7 +133,7 @@ $("#search").keyup(function (e) {
                 });
             }
         });
-    }, 250);
+    }, 150);
 });
 
 
@@ -188,7 +188,6 @@ $(".collapse-text").each( function(event) {   //Expands selection
 
 function showScore(score, count, show) {
     score = Math.round(score);
-    count += 1;
     switch (show) {
         case 1:
             return `#${count}`;
@@ -213,6 +212,7 @@ function movieLists() {
         amount = list.data("amount");
         show = list.data("show_score");
         $.ajax({
+            async: false,
             type: "GET",
             url: "/_get_top_list",
             dataType: "json",
@@ -226,15 +226,17 @@ function movieLists() {
                 for (let i = 0; i < movies.length; i++) {
                     const e = movies[i];
                     list.append(`
+                    <a href="/m/${e[0].id}">
                         <div class="row movie">
-                            <img src="https://image.tmdb.org/t/p/w138_and_h175_face${e[0].poster_path}" alt="${e[0].original_title}">
+                            <img src="https://image.tmdb.org/t/p/w220_and_h330_face${e[0].poster_path}" alt="${e[0].name}">
                             <div>
-                                <a href="/m/${e[0].id}"><h3>${e[0].original_title}</h3></a>
+                                <h3>${e[0].name}</h3>
                             </div>
-                            <a class="tooltip">${showScore(e[1], i, show)}
-                            <span class="tooltiptext">#${i+1} in <i>${response.category} movies</i>, with a <i>${response.category} movie</i> score of ${Math.round(e[1])}</span>
-                            </a>
+                            <b class="tooltip">${showScore(e[1], e[2], show)}
+                            <span class="tooltiptext">#${e[2]} in <i>${response.category} movies</i>, with a <i>${response.category} movie</i> score of ${Math.round(e[1])} (${ e[3] } votes)</span>
+                            </b>
                         </div>
+                    </a>
                     `)
                 }
             }

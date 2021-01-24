@@ -18,24 +18,11 @@ def moviePage(movie_id = None):
     respons = requests.get('http://api.themoviedb.org/3/movie/' + movie_id + '?api_key=' + tmdb_key)
     if respons.status_code != 200:
         abort(404)
+    pmf.add_movie(movie_id)
     movie_data = json.loads(respons.text)
-    respons = requests.get('http://api.themoviedb.org/3/movie/' + movie_id + '/credits?api_key=' + tmdb_key)
-    credits = respons.json()
-    cast = credits['cast']
-    directors = []
-    writers = []
-    for person in credits['crew']:
-        if person['job'] == 'Director':
-            directors.append(person)
-        elif person['job'] == 'Screenplay':
-            writers.append(person)
-    
-    scores = {
-        'categories'    : pmf.get_movie_categories(movie_id),
-        'people'        : pmf.get_movie_people(movie_id)
-        }
-    print(scores)
-    return render_template('movie.html', movie = movie_data, scores = scores, cast = cast, directors = directors, writers = writers)
+    categories = pmf.get_movie_categories_with_score(movie_id)
+    people = pmf.get_movie_people(movie_id)
+    return render_template('movie.html', movie = movie_data, categories = categories, people = people)
     
 
 @app.route('/p/<person_id>')
@@ -57,19 +44,23 @@ def personPage(person_id = None):
 def compare():
     return render_template('compare.html')
 
-@app.route('/toplist')
-def toplist():
-    return render_template('toplist.html')
+@app.route('/toplist/<ctype>/<tid>')
+@app.route('/toplist/')
+def toplist(ctype='category', tid='0'):
+    return render_template('toplist.html', ctype=ctype, tid=tid)
 
 @app.route('/_getmovies')
 def getMovs():
-    m1 = pmf.get_random_movie().id
+    m1, m2 = pmf.get_random_related_movies()
+    common_cats = pmf.get_common_categories(m1.id, m2.id)
+    common_peps = pmf.get_common_people(m1.id, m2.id)
     movies = {
-        'm1' : m1,
-        'm2' : pmf.get_random_movie(m1).id
+        'm1' : m1.serialize,
+        'm2' : m2.serialize,
+        'common_categories' : common_cats,
+        'common_people'     : common_peps
     }
-    out = json.dumps(movies)   
-    return out
+    return movies
 
 @app.route('/_get_top_list')
 def getTopList():
@@ -83,9 +74,8 @@ def getTopList():
         category = pmf.get_category(data_id).name
     movie_list = []
     for movie in islice(movies, max_amount):
-        respons = requests.get('http://api.themoviedb.org/3/movie/' + str(movie.movie_id) + '?api_key=' + tmdb_key)
-        movie_data = json.loads(respons.text)
-        movie_list.append((movie_data, movie.score))
+        minfo = movie[0].movie.serialize
+        movie_list.append((minfo, movie[0].score, movie[1], movie[0].votes))
     return {'category': category, 'movies': movie_list}
 
 @app.route('/_vote_for_movie', methods=['GET', 'POST'])

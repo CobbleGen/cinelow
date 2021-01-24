@@ -11,7 +11,15 @@
     <div id="headers">
         <div id="top-head">
             <h1>{{movie['original_title']}}</h1>
-            <a>{% if scores['categories'] | length > 0%} {{ scores['categories'][0].score | int}} {% else %} N/A {% endif %}</a>
+            <a class="tooltip">
+                {% if categories[0][4] %}
+                    {{ categories[0][2] | int}} | #{{ categories[0][1] | int}}
+                    <span class="tooltiptext">#{{ categories[0][1] }} in <i>movies</i>, with a <i>movie</i> score of {{ categories[0][2] | int }}  ({{ categories[0][3] }} votes)</span>
+                {% else %}
+                    N/A
+                    <span class="tooltiptext">Not enough votes to display score. ({{ categories[0][3] }} votes)</span>
+                {% endif %}
+            </a>
         </div>
         <div id="bot-head">
             <h5>{{movie['release_date']}} | {{movie['runtime']}} mins </h5>
@@ -23,64 +31,76 @@
         <div id="wrapping-box">
             <div id="description"><p>{{movie.overview}}</p></div>
             <div id="info">
-                <a>Director{% if directors|length > 1 %}s{% endif %}</a>
-                {% for director in directors %}
-                    {% if director['job'] == 'Director' %}
+                <a>Director{% if people['director'] | length > 1 %}s{% endif %}</a>
+                {% for director in people['director'] %}
+                    <div>
+                        <a href="{{url_for('personPage', person_id = director[0].id)}}"><h3>{{director[0].name}}</h3></a>
+                        <a class="tooltip">
+                            {% if director[5] %}
+                                #{{ director[1] | int }}
+                                <span class="tooltiptext">#{{ director[1] }} in <i>{{director[0].name}} movies</i>, with a <i>{{director[0].name}} movie</i> score of {{ director[2] | int }} ({{ director[4] }} votes)</span>
+                            {% else %}
+                            N/A
+                            <span class="tooltiptext">Not enough votes to display score. ({{ director[4] }} votes)</span>
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endfor %}
+                {% if people['writer'] | length > 0 %}
+                    <a>Writer{% if people['writer'] | length > 1 %}s{% endif %}</a>
+                    {% for writer in people['writer'] %}
                         <div>
-                            <a href="{{url_for('personPage', person_id = director['id'])}}"><h3>{{director['name']}}</h3></a>
+                            <a href="{{url_for('personPage', person_id = writer[0].id)}}"><h3>{{writer[0]['name']}}</h3></a>
                             <a class="tooltip">
-                                {% if director['id'] in scores['people'] %}
-                                    {{ scores['people'][director['id']].score | int }}
+                                {% if writer[5] %}
+                                    #{{ writer[1] | int }}
+                                    <span class="tooltiptext">#{{ writer[1] }} in <i>{{writer[0].name}} movies</i>, with a <i>{{writer[0].name}} movie</i> score of {{ writer[2] | int }}   ({{ writer[4] }} votes)</span>   
                                 {% else %}
                                     N/A
+                                    <span class="tooltiptext">Not enough votes to display score. ({{ writer[4] }} votes)</span>
                                 {% endif %}
-                                <span class="tooltiptext">Tooltip text lorem ipsupm fucking folodoor</span>
                             </a>
                         </div>
-                    {% endif %}
-                {% endfor %}
-                {% if writers|length > 0 %}
-                    <a>Writer{% if writers|length > 1 %}s{% endif %}</a>
-                    {% for writer in writers %}
-                        {% if writer['job'] == 'Screenplay' %}
-                            <div>
-                                <a href="{{url_for('personPage', person_id = writer['id'])}}"><h3>{{writer['name']}}</h3></a>
-                                <a>
-                                    {% if writer['id'] in scores['people'] %}
-                                        {{ scores['people'][writer['id']].score | int }}
-                                    {% else %}
-                                        N/A
-                                    {% endif %}    
-                                </a>
-                            </div>
-                        {% endif %}
                     {% endfor %}
                 {% endif %}
             </div>
         </div>
         <div id="genres">
             <b><p>Genres</p></b>
-            {% for genre in movie['genres'] %}
-                <div class="genre"><a href="#"><h4>{{genre['name']}}</h4></a> <a>1670 #5</a></div>
+            {% for genre in categories [1: ] %}
+                <div class="genre"><a href="{{url_for('toplist', ctype='category', tid=genre[0].id)}}"><h4>{{genre[0].name}}</h4></a> 
+                    <a class="tooltip">
+                        {% if genre[4] %}
+                        #{{genre[1]}}
+                        <span class="tooltiptext">#{{ genre[1] }} in <i>{{genre[0].name}} movies</i>, with a <i>{{genre[0].name}} movie</i> score of {{ genre[2] | int }}  ({{ genre[3] }} votes)</span>
+                        {% else %}
+                            N/A
+                            <span class="tooltiptext">Not enough votes to display score. ({{ genre[3] }} votes)</span>
+                        {% endif %}
+                    </a>
+                </div>
             {% endfor %}
         </div>
         <div id="cast">
             <b><p>Actors</p></b>
-            <div class="vert-list">
-                {% for person in cast [:10] %}
-                <div class="row person">
-                    <img src="https://image.tmdb.org/t/p/w138_and_h175_face{{person['profile_path']}}" alt="{{person['name']}}">
-                    <div>
-                        <a href="{{url_for('personPage', person_id = person['id'])}}"><h3>{{person['name']}}</h3></a>
-                        <a>{{person['character']}}</a>
+            <div class="list vert-list">
+                {% for person in people['actor'] %}
+                    <div class="row person">
+                        <img src="https://image.tmdb.org/t/p/w138_and_h175_face{{person[0].profile_path}}" alt="{{person[0].name}}">
+                        <div>
+                            <a href="{{url_for('personPage', person_id = person[0].id)}}"><h3>{{person[0].name}}</h3></a>
+                            <a>{{person[3]}}</a>
+                        </div>
+                        <a class="tooltip">
+                            {% if person[5] %}
+                                #{{ person[1] | int }}
+                                <span class="tooltiptext">#{{ person[1] }} in <i>{{person[0].name}} movies</i>, with a <i>{{person[0].name}} movie</i> score of {{ person[2] | int }}  ({{ person[4] }} votes)</span>
+                            {% else %}
+                                 N/A
+                                <span class="tooltiptext">Not enough votes to display score. ({{ person[4] }} votes)</span>
+                            {% endif %}
+                        </a>
                     </div>
-                    <a>{% if person['id'] in scores['people'] %}
-                            {{ scores['people'][person['id']].score | int }}
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </a>
-                </div>
                 {% endfor %}
             </div>
         </div>

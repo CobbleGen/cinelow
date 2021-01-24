@@ -5,7 +5,7 @@ import json
 tmdb_key = 'db254eee52d0c8fbc70d51368cd24644'
 
 def importFromPage(page):
-    respons = requests.get('https://api.themoviedb.org/3/movie/top_rated?api_key=' + tmdb_key + '&page=' + page)
+    respons = requests.get('https://api.themoviedb.org/3/movie/top_rated?api_key=' + tmdb_key + '&language=en-US&page=' + page)
     if respons.status_code != 200:
         print('Failed.')
     else:
@@ -25,4 +25,4 @@ importFromPage(start_page)
 
 
 #from my_server.database import movieimport
-#Next up: 31
+#Next up: 7

@@ -70,6 +70,28 @@ input[type=checkbox] {
   color: #ebd620;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1A1A1A;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #242424;
+}
+
 nav {
   height: 50px;
   background-color: #1A1A1A;
@@ -225,6 +247,7 @@ nav form i {
   border-radius: 0 0 10px 10px;
   top: -30px;
   z-index: 10;
+  outline: none !important;
 }
 
 #main-block #search-results {
@@ -504,12 +527,73 @@ nav form i {
   color: #ebd620;
 }
 
+.list .person {
+  margin-bottom: 20px !important;
+}
+
+.list .person img {
+  width: 70px;
+  height: 70px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+}
+
+.list .movie {
+  -webkit-transition: background-color, 0.3s ease;
+  transition: background-color, 0.3s ease;
+}
+
+.list .movie:hover {
+  background-color: #242424;
+  cursor: pointer;
+}
+
+.horiz-list {
+  margin-bottom: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  overflow: auto;
+}
+
+.horiz-list .movie {
+  margin: 3px;
+  padding: 3px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+  border-radius: 5px;
+  max-width: 120px;
+}
+
+.horiz-list .movie h3, .horiz-list .movie b {
+  font-size: 1.25rem;
+}
+
+.horiz-list .movie img {
+  width: 120px;
+  height: 180px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
 .vert-list {
   width: 100%;
 }
 
 .vert-list .row {
-  padding: 15px;
+  margin: 5px;
+  padding: 5px;
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -533,25 +617,17 @@ nav form i {
 
 .vert-list .row img {
   position: absolute;
-  left: 0;
-}
-
-.vert-list .person img {
-  width: 70px;
-  height: 70px;
-  -o-object-fit: cover;
-     object-fit: cover;
-  border-radius: 50%;
+  left: 5px;
 }
 
 .vert-list .movie {
-  margin-bottom: 50px;
-  margin-top: 30px;
+  height: 110px;
+  border-radius: 10px;
 }
 
 .vert-list .movie img {
   width: 70px;
-  height: 100px;
+  height: 110px;
   border-radius: 5px;
 }
 
@@ -656,6 +732,31 @@ nav form i {
   color: #494949;
 }
 
+#compare-title {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#compare-title #q-icon {
+  margin-left: 10px;
+  font-size: 3rem;
+  color: #ebd620;
+}
+
+#compare-title #q-icon:hover {
+  color: #ac9d1b;
+}
+
 #poster-boxes {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -663,14 +764,33 @@ nav form i {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
+}
+
+#poster-boxes #vs-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#poster-boxes #vs-box h1 {
+  font-size: 7rem;
+}
+
+#poster-boxes .movie-name {
+  text-align: center;
+  color: #949494;
+}
+
+#poster-boxes .movie {
+  width: 40%;
 }
 
 #poster-boxes .movie-box {
-  width: 40%;
-  border: 3px rgba(128, 128, 128, 0) solid;
+  width: 100%;
+  border: 3px #1A1A1A solid;
   border-radius: 5px;
   -webkit-transition: border-color 0.5s ease;
   transition: border-color 0.5s ease;
@@ -711,6 +831,10 @@ nav form i {
   transition: visibility 0.3s ease, opacity 0.3s ease;
 }
 
+.tooltip .tooltiptext i {
+  color: #ebd620;
+}
+
 .tooltip .tooltiptext::after {
   content: " ";
   position: absolute;
@@ -720,6 +844,23 @@ nav form i {
   border-width: 5px;
   border-style: solid;
   border-color: #1A1A1A transparent transparent transparent;
+}
+
+.tooltip .tooltip-bot {
+  bottom: auto;
+  top: 130%;
+}
+
+.tooltip .tooltip-bot::after {
+  content: " ";
+  position: absolute;
+  top: auto;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #1A1A1A transparent;
 }
 
 .tooltip:hover .tooltiptext {
