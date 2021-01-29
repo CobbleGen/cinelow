@@ -11,6 +11,10 @@ def createUser(uname, email, password):
     db.session.add(new)
     db.session.commit()
 
+def getUserById(uid):
+    user = User.query.filter_by(id=uid).first()
+    return user
+
 def getUserByEmail(umail):
     user = User.query.filter_by(email=umail).first()
     return user

@@ -92,3 +92,49 @@
         }
     }
 }
+
+@media screen and (max-width: 769px) { 
+    #headers {
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+    #recommendations {
+        h2 {
+            font-size: 2rem;
+        }
+    }
+    #grid-div {
+
+        grid-template-areas: "img-div    info info "
+                             "description     description description  "
+                             "movies movies movies";
+        grid-template-rows:    225px auto auto;
+        grid-template-columns: 150px 1fr 1fr;
+        column-gap: 8px;
+
+        #img-div {
+            width: 150px;
+            height: 225px;
+            img {
+                width: 100%;
+            }
+        }
+        #description {
+            p{
+                font-size: 1rem;
+            }
+        }
+        #info {
+            h3 {
+                font-size: 1.5rem;
+            }
+        }
+        #genres {
+            p {
+                font-size: 1rem!important;
+            }
+        }
+        
+    }
+}

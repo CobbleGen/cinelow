@@ -5,6 +5,12 @@
 
 html {
   font-size: 80%;
+  overflow-x: hidden;
+}
+
+body {
+  min-width: 100%;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -130,6 +136,11 @@ nav #navbar {
           justify-content: space-between;
 }
 
+nav #navbar #logonbar #logo {
+  margin-top: 7px;
+  height: 50px;
+}
+
 nav #navbar div {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -155,11 +166,6 @@ nav #navbar div #user-img {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-}
-
-nav #navbar div #logo {
-  margin-top: 7px;
-  height: 50px;
 }
 
 nav #navbar div > * {
@@ -219,6 +225,7 @@ nav form i {
   right: 10px;
   color: #1A1A1A;
   font-size: 1.5rem;
+  pointer-events: none;
 }
 
 #outer-block {
@@ -786,6 +793,32 @@ nav form i {
 
 #poster-boxes .movie {
   width: 40%;
+  position: relative;
+}
+
+#poster-boxes .movie .not-seen-btn {
+  margin: 3px;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 0px solid transparent;
+  border-bottom: 90px solid transparent;
+  border-left: 90px solid #1A1A1A;
+}
+
+#poster-boxes .movie .not-seen-btn i {
+  position: absolute;
+  font-size: 2.3rem;
+  color: #949494;
+  top: 15px;
+  left: -83px;
+  -webkit-transition: color 0.3s ease;
+  transition: color 0.3s ease;
+}
+
+#poster-boxes .movie .not-seen-btn i:hover {
+  cursor: pointer;
+  color: #ff4444;
 }
 
 #poster-boxes .movie-box {
@@ -923,8 +956,79 @@ nav form i {
   nav #navbar {
     width: 100%;
   }
+  nav #navbar #logonbar {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+        -ms-flex-direction: row-reverse;
+            flex-direction: row-reverse;
+    margin-left: 5px;
+  }
+  nav #navbar #logonbar #logo {
+    height: 25px;
+  }
+  nav #navbar form i {
+    right: 9px;
+    color: #949494;
+  }
+  nav #navbar form input[type=text] {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0;
+    border-radius: 1.8rem;
+    background-color: transparent;
+  }
+  nav #navbar form input[type=text]:focus {
+    position: absolute;
+    right: -5.5rem;
+    font-size: 1.25rem;
+    width: 27.5rem;
+    background-color: white;
+  }
+  nav #navbar form input[type=text]:focus + i {
+    right: -4.5rem;
+    color: #1A1A1A;
+  }
+  nav #navbar #user-drop {
+    font-size: 0;
+  }
+  nav #navbar div > i, nav #navbar img {
+    margin: 2px !important;
+  }
   #main-block {
+    width: 95%;
+  }
+  #main-block .hidden-dropdown {
+    width: 100% !important;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+  }
+  #compare-title {
+    margin-top: -2rem;
+    margin-bottom: 5px;
+  }
+  #compare-title h1 {
+    font-size: 2rem;
+  }
+  #poster-boxes {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: column;
+            flex-flow: column;
+  }
+  #poster-boxes .movie {
     width: 100%;
+    height: 40vh;
+  }
+  #poster-boxes .movie .movie-name {
+    font-size: 1.5rem;
+  }
+  #poster-boxes .movie img {
+    height: 35vh;
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
+  #poster-boxes #vs-box {
+    display: none;
   }
 }
 /*# sourceMappingURL=style.css.map */

@@ -2,6 +2,7 @@
   position: relative;
   border-radius: 50%;
   height: 250px;
+  width: 250px;
   background-color: black;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -36,8 +37,8 @@
 
 #user-img {
   border-radius: 50%;
-  width: 250px;
-  height: 250px;
+  width: 100%;
+  height: 100%;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
@@ -63,5 +64,30 @@ input[type="file"] {
 .error-msg {
   color: #ff4444;
   font-size: 1rem;
+}
+
+@media screen and (max-width: 769px) {
+  #title {
+    text-align: center;
+    font-size: 2rem;
+  }
+  #main-wrapper {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: column;
+            flex-flow: column;
+  }
+  #left-section {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+  #left-section #img-wrapper {
+    width: 125px;
+    height: 125px;
+  }
 }
 /*# sourceMappingURL=useraccount.css.map */

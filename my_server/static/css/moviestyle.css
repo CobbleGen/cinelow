@@ -90,6 +90,16 @@
   -ms-grid-column: 1;
   -ms-grid-column-span: 2;
   grid-area: genres;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
 }
 
 #grid-div #genres p {
@@ -116,5 +126,42 @@
 
 #grid-div #cast p {
   font-size: 2.5rem;
+}
+
+@media screen and (max-width: 769px) {
+  #headers h1 {
+    font-size: 2.5rem;
+  }
+  #recommendations h2 {
+    font-size: 2rem;
+  }
+  #grid-div {
+        grid-template-areas: "img-div  img-div   wra-box wra-box wra-box wra-box " "genres    genres  wra-box wra-box wra-box wra-box" "cast      cast    cast cast cast cast";
+    -ms-grid-rows: 225px auto auto;
+        grid-template-rows: 225px auto auto;
+    -ms-grid-columns: 75px 75px 1fr 1fr 1fr 1fr;
+        grid-template-columns: 75px 75px 1fr 1fr 1fr 1fr;
+    -webkit-column-gap: 8px;
+            column-gap: 8px;
+  }
+  #grid-div #img-div {
+    width: 150px;
+    height: 225px;
+  }
+  #grid-div #img-div img {
+    width: 100%;
+  }
+  #grid-div #wrapping-box {
+    height: 100%;
+  }
+  #grid-div #wrapping-box #description p {
+    font-size: 1rem;
+  }
+  #grid-div #wrapping-box #info h3 {
+    font-size: 1.5rem;
+  }
+  #grid-div #wrapping-box #genres p {
+    font-size: 1rem !important;
+  }
 }
 /*# sourceMappingURL=moviestyle.css.map */

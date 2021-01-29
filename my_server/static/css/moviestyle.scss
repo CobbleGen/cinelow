@@ -56,6 +56,9 @@
     #genres {
         padding-top: 15px;
         grid-area: genres;
+        display: flex;
+        flex-flow: column;
+        justify-content: end;
         
         p {
             font-size: 2.5rem;
@@ -72,6 +75,54 @@
 
         p {
             font-size: 2.5rem;
+        }
+    }
+}
+
+@media screen and (max-width: 769px) { 
+    #headers {
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+    #recommendations {
+        h2 {
+            font-size: 2rem;
+        }
+    }
+    #grid-div {
+
+        grid-template-areas: "img-div  img-div   wra-box wra-box wra-box wra-box "
+                             "genres    genres  wra-box wra-box wra-box wra-box"
+                             "cast      cast    cast cast cast cast";
+        grid-template-rows:    225px auto auto;
+        grid-template-columns: 75px 75px 1fr 1fr 1fr 1fr;
+        column-gap: 8px;
+
+        #img-div {
+            width: 150px;
+            height: 225px;
+            img {
+                width: 100%;
+            }
+        }
+        #wrapping-box {
+            height: 100%;
+            #description {
+                p{
+                    font-size: 1rem;
+                }
+            }
+            #info {
+                h3 {
+                    font-size: 1.5rem;
+                }
+            }
+            #genres {
+                p {
+                    font-size: 1rem!important;
+                }
+            }
         }
     }
 }

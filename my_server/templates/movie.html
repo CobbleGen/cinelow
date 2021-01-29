@@ -22,7 +22,7 @@
             </a>
         </div>
         <div id="bot-head">
-            <h5>{{movie['release_date']}} | {{movie['runtime']}} mins </h5>
+            <a>{{movie['release_date']}} | {{movie['runtime']}} mins </a>
             <div class="toggle-button disabled" title="Watched?"><i class="fas fa-check"></i></div>
         </div>
     </div>
@@ -80,6 +80,9 @@
                     </a>
                 </div>
             {% endfor %}
+            <br />
+            <b><p>Budget</p></b>
+            <h4>{{ "${:,}".format(movie['budget']) }}</h4>
         </div>
         <div id="cast">
             <b><p>Actors</p></b>
@@ -103,6 +106,19 @@
                     </div>
                 {% endfor %}
             </div>
+        </div>
+    </div>
+    <br />
+    <div id="recommendations">
+        <h2>More movies like this one:</h2>
+        <div class="list horiz-list">
+            {% for movie in recomendations %}
+                <a href="/m/{{movie['id']}}">
+                    <div class="row movie">
+                        <img src="https://image.tmdb.org/t/p/w220_and_h330_face{{movie['poster_path']}}" alt="{{movie['original_title']}}">
+                    </div>
+                </a>
+            {% endfor %}
         </div>
     </div>
     

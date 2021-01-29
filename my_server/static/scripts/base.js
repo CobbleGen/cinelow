@@ -12,9 +12,12 @@ $("#user-drop").click(function (e) {
 });
 $("#menu-bars").mousedown(function (e) { 
     e.preventDefault();
-    $("#main-menu").slideDown().focus();
+    setTimeout(() => {
+        $("#main-menu").slideDown().focus();
+    }, 50);
 });
 $(".hidden-dropdown").on("blur", function(e) {
+    console.log("lost focus");
     setTimeout(() => {
         $(this).slideUp();
     }, 100);
@@ -43,97 +46,101 @@ $("#search").focusout(function (e) {
 $("#search").keyup(function (e) { 
     $("#search-results").show();
     clearTimeout(timeout);
-    timeout = setTimeout(function() {
-        //Get movie info based on search query
-        $.ajax({
-            type: "GET",
-            url: "https://api.themoviedb.org/3/search/movie",
-            data: {
-                api_key: tmdb_key,
-                language: "en-US",
-                query: $("#search").val(),
-                include_adult: false
-            },
-            dataType: "json",
-            success: function (movieResponse) {
-                //get people info based on search query
-                $.ajax({
-                    type: "GET",
-                    url: "https://api.themoviedb.org/3/search/person",
-                    data: {
-                        api_key: tmdb_key,
-                        language: "en-US",
-                        query: $("#search").val(),
-                        include_adult: false
-                    },
-                    dataType: "json",
-                    success: function (personResponse) {
-                        //Combine the two lists sorted by popularity score
-                        let arr1 = movieResponse.results;
-                        let arr2 = personResponse.results;
-                        let merged = [];
-                        let index1 = 0;
-                        let index2 = 0;
-                        let current = 0;
+    if ($("#search").val() == "") {
+        $("#search-results").hide();
+    } else {
+        timeout = setTimeout(function() {
+            //Get movie info based on search query
+            $.ajax({
+                type: "GET",
+                url: "https://api.themoviedb.org/3/search/movie",
+                data: {
+                    api_key: tmdb_key,
+                    language: "en-US",
+                    query: $("#search").val(),
+                    include_adult: false
+                },
+                dataType: "json",
+                success: function (movieResponse) {
+                    //get people info based on search query
+                    $.ajax({
+                        type: "GET",
+                        url: "https://api.themoviedb.org/3/search/person",
+                        data: {
+                            api_key: tmdb_key,
+                            language: "en-US",
+                            query: $("#search").val(),
+                            include_adult: false
+                        },
+                        dataType: "json",
+                        success: function (personResponse) {
+                            //Combine the two lists sorted by popularity score
+                            let arr1 = movieResponse.results;
+                            let arr2 = personResponse.results;
+                            let merged = [];
+                            let index1 = 0;
+                            let index2 = 0;
+                            let current = 0;
 
-                        while (current < (arr1.length + arr2.length) && current < 20) {
-                            if (index2 >= arr2.length || index1 >= arr1.length) {
-                                break;
-                            }
-                            if(arr1[index1].popularity > arr2[index2].popularity) {
-                                merged[current] = arr1[index1];
-                                index1++;
-                            } else {
-                                merged[current] = arr2[index2];
-                                index2++;
+                            while (current < (arr1.length + arr2.length) && current < 20) {
+                                if (index2 >= arr2.length || index1 >= arr1.length) {
+                                    break;
+                                }
+                                if(arr1[index1].popularity > arr2[index2].popularity) {
+                                    merged[current] = arr1[index1];
+                                    index1++;
+                                } else {
+                                    merged[current] = arr2[index2];
+                                    index2++;
+                                }
+
+                                current++;
                             }
 
-                            current++;
+                            $("#search-results").empty();
+                            //console.log(merged);
+                            let newDiv = null;
+                            for (let i = 0; i < merged.length; i++) {
+                                const result = merged[i];
+                                if (result.gender == null) {
+                                    newDiv = $("<div>").html(`
+                                        <a href="/m/${result.id}">
+                                            <div class="searched movie">
+                                                <div class="searched-img">
+                                                    <img src="https://image.tmdb.org/t/p/w94_and_h141_bestv2${result.poster_path}" alt="${result["original_title}"]}">
+                                                </div>
+                                                <div class="searched-content">
+                                                    <div class="searched-headline"><h4>${result.original_title}</h4> <p>(${result.release_date.slice(0, 4)})</p></div>
+                                                    <p>${result.overview}</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        `);
+                                } else {
+                                    let knownFor = result.known_for.map(a => a.original_title).join(", ");
+                                    newDiv = $("<div>").html(`
+                                        <a href="/p/${result.id}">
+                                            <div class="searched person">
+                                                <div class="searched-img">
+                                                    <img src="https://image.tmdb.org/t/p/w94_and_h141_bestv2${result.profile_path}" alt="${result.name}">
+                                                </div>
+                                                <div class="searched-content">
+                                                    <div class="searched-headline"><h4>${result.name}</h4> <p>(${result.known_for_department})</p></div>
+                                                    <p>Known for: ${knownFor}</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        `);
+                                }
+                                
+                                $("#search-results").append(newDiv);
+                            }
                         }
-
-                        $("#search-results").empty();
-                        //console.log(merged);
-                        let newDiv = null;
-                        for (let i = 0; i < merged.length; i++) {
-                            const result = merged[i];
-                            if (result.gender == null) {
-                                newDiv = $("<div>").html(`
-                                    <a href="/m/${result.id}">
-                                        <div class="searched movie">
-                                            <div class="searched-img">
-                                                <img src="https://image.tmdb.org/t/p/w94_and_h141_bestv2${result.poster_path}" alt="${result["original_title}"]}">
-                                            </div>
-                                            <div class="searched-content">
-                                                <div class="searched-headline"><h4>${result.original_title}</h4> <p>(${result.release_date.slice(0, 4)})</p></div>
-                                                <p>${result.overview}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    `);
-                            } else {
-                                let knownFor = result.known_for.map(a => a.original_title).join(", ");
-                                newDiv = $("<div>").html(`
-                                    <a href="/p/${result.id}">
-                                        <div class="searched person">
-                                            <div class="searched-img">
-                                                <img src="https://image.tmdb.org/t/p/w94_and_h141_bestv2${result.profile_path}" alt="${result.name}">
-                                            </div>
-                                            <div class="searched-content">
-                                                <div class="searched-headline"><h4>${result.name}</h4> <p>(${result.known_for_department})</p></div>
-                                                <p>Known for: ${knownFor}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    `);
-                            }
-                            
-                            $("#search-results").append(newDiv);
-                        }
-                    }
-                });
-            }
-        });
-    }, 150);
+                    });
+                }
+            });
+        }, 150);
+    }
 });
 
 
@@ -211,6 +218,7 @@ function movieLists() {
         data_id = list.data("id");
         amount = list.data("amount");
         show = list.data("show_score");
+        show_name = list.data("sname") ?? 1;
         $.ajax({
             async: false,
             type: "GET",
@@ -230,7 +238,7 @@ function movieLists() {
                         <div class="row movie">
                             <img src="https://image.tmdb.org/t/p/w220_and_h330_face${e[0].poster_path}" alt="${e[0].name}">
                             <div>
-                                <h3>${e[0].name}</h3>
+                                <h3>${show_name ? e[0].name : ""}</h3>
                             </div>
                             <b class="tooltip">${showScore(e[1], e[2], show)}
                             <span class="tooltiptext">#${e[2]} in <i>${response.category} movies</i>, with a <i>${response.category} movie</i> score of ${Math.round(e[1])} (${ e[3] } votes)</span>

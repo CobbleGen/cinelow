@@ -1,3 +1,4 @@
+from flask_login import current_user
 from my_server import app
 from my_server.database import dbhandler as dbh, pers_movie_dbf as pmf
 from flask import Blueprint, request, url_for, redirect, render_template, abort
@@ -22,7 +23,11 @@ def moviePage(movie_id = None):
     movie_data = json.loads(respons.text)
     categories = pmf.get_movie_categories_with_score(movie_id)
     people = pmf.get_movie_people(movie_id)
-    return render_template('movie.html', movie = movie_data, categories = categories, people = people)
+    respons = requests.get('https://api.themoviedb.org/3/movie/' + movie_id + '/recommendations?api_key=' + tmdb_key + '&language=en-US&page=1')
+    if respons.status_code != 200:
+        return None
+    recomendations = json.loads(respons.text)['results'][0:10]
+    return render_template('movie.html', movie = movie_data, categories = categories, people = people, recomendations = recomendations)
     
 
 @app.route('/p/<person_id>')
@@ -51,7 +56,7 @@ def toplist(ctype='category', tid='0'):
 
 @app.route('/_getmovies')
 def getMovs():
-    m1, m2 = pmf.get_random_related_movies()
+    m1, m2 = pmf.get_random_related_movies(current_user)
     common_cats = pmf.get_common_categories(m1.id, m2.id)
     common_peps = pmf.get_common_people(m1.id, m2.id)
     movies = {
@@ -82,5 +87,16 @@ def getTopList():
 def voteMovie():
     wid = request.form['winning_id']
     lid = request.form['losing_id']
-    pmf.vote_for(wid, lid)
+    if current_user.is_authenticated:
+        pmf.vote_for(wid, lid, current_user.id)
+    else:
+        pmf.vote_for(wid, lid)
+    return 'Success'
+
+@app.route('/_seen_movie', methods=['GET', 'POST'])
+def seenMovie():
+    mid = request.form['movie_id']
+    seen = request.form['seen_value']
+    if current_user.is_authenticated:
+        pmf.seen_movie(mid, current_user.id, seen)
     return 'Success'

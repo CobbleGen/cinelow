@@ -15,12 +15,10 @@ function getNewMovies() {
             $('#name1').text(movie1.name);
             $('#name2').text(movie2.name);
             let concatArray = response.common_categories.concat(response.common_people);
-            console.log(concatArray);
             let out = "";
             for (let i = 1; i < concatArray.length; i++) {
                 const e = concatArray[i];
                 out += e.name + " movie <br />";
-                console.log(e.name);
             }
             $("#common-tt").html("<a> <h4>Which is the best:</h4>" + out + "</a>");
         },
@@ -38,6 +36,32 @@ $('#movie1-box').click(function (e) {
 $('#movie2-box').click(function (e) { 
     e.preventDefault();
     voteMovie(movie2.id, movie1.id);
+});
+$('#ns-movie1').click(function (e) {
+    $.ajax({
+        type: "POST",
+        url: "/_seen_movie",
+        data: {
+            movie_id    : movie1.id,
+            seen_value  : -1
+        },
+        success: function (response) {
+            getNewMovies();
+        }
+    });
+});
+$('#ns-movie2').click(function (e) {
+    $.ajax({
+        type: "POST",
+        url: "/_seen_movie",
+        data: {
+            movie_id    : movie2.id,
+            seen_value  : -1
+        },
+        success: function (response) {
+            getNewMovies();
+        }
+    });
 });
 
 function voteMovie(winning_id, losing_id) {

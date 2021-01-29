@@ -13,6 +13,11 @@
 
 html {
     font-size: 80%;
+    overflow-x: hidden;
+}
+body {
+    min-width: 100%;
+    overflow-x:hidden;
 }
 
 h1 {
@@ -120,6 +125,12 @@ nav {
         align-items: center;
         justify-content: space-between;
 
+        #logonbar {
+            #logo {
+                margin-top: 7px;
+                height: 50px;
+            }
+        }
         div {
             display: flex;
             flex-flow: row;
@@ -133,11 +144,6 @@ nav {
                 width: 32px;
                 height: 32px;
                 border-radius: 50%;
-            }
-
-            #logo {
-                margin-top: 7px;
-                height: 50px;
             }
         }
         div > * {
@@ -188,6 +194,7 @@ nav {
             right: 10px;
             color: $sec-bg;
             font-size: 1.5rem;
+            pointer-events: none;
         }
     }
  }
@@ -644,6 +651,33 @@ nav {
 
     .movie {
         width: 40%;
+        position: relative;
+        
+        .not-seen-btn {
+            margin: 3px;
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 0px solid transparent;
+            border-bottom: 90px solid transparent;
+            border-left: 90px solid $sec-bg;
+
+            i {
+                position: absolute;
+                font-size: 2.3rem;
+                color: $text-gray;
+                top: 15px;
+                left: -83px;
+                transition: color 0.3s ease;
+
+                &:hover {
+                    cursor: pointer;
+                    color: $error-red;
+                }
+            }
+
+            
+        }
     }
 
     .movie-box {
@@ -789,9 +823,80 @@ nav {
     nav {
         #navbar {
             width: 100%;
+
+            #logonbar {
+                flex-direction: row-reverse;
+                margin-left: 5px;
+                #logo {
+                    height: 25px;
+                }
+            }
+
+            form {
+                i {
+                    right: 9px;
+                    color: $text-gray;
+                }
+                input[type=text] {
+                    width: 1.8rem;
+                    height: 1.8rem;
+                    font-size: 0;
+                    border-radius: 1.8rem;
+                    background-color: transparent;
+                }
+        
+                input[type=text]:focus {
+                    position: absolute;
+                    right: -5.5rem;
+                    font-size: 1.25rem;
+                    width: 27.5rem;
+                    background-color: white;
+                    + i {
+                        right: -4.5rem;
+                        color: $sec-bg;
+                    }
+                }
+ 
+            }
+            #user-drop {
+                font-size: 0;
+            }
+            div > i, img {
+                margin: 2px!important;
+            }
         }
     }
     #main-block {
-        width: 100%;
+        width: 95%;
+
+        .hidden-dropdown {
+            width: 100%!important;
+            margin-left: 5px!important;
+            margin-right: 5px!important;
+        }
+    }
+    #compare-title {
+        margin-top: -2rem;
+        margin-bottom: 5px;
+        h1 {
+            font-size: 2rem;
+        }
+    }
+    #poster-boxes {
+        flex-flow: column;
+        .movie {
+            width: 100%;
+            height: 40vh;
+            .movie-name {
+                font-size: 1.5rem;
+            }
+            img {
+                height: 35vh;
+                object-fit: cover;
+            }
+        }
+        #vs-box {
+            display: none;
+        }
     }
 }

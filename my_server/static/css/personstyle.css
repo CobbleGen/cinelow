@@ -136,4 +136,38 @@
   position: absolute;
   left: 0;
 }
+
+@media screen and (max-width: 769px) {
+  #headers h1 {
+    font-size: 2.5rem;
+  }
+  #recommendations h2 {
+    font-size: 2rem;
+  }
+  #grid-div {
+        grid-template-areas: "img-div    info info " "description     description description  " "movies movies movies";
+    -ms-grid-rows: 225px auto auto;
+        grid-template-rows: 225px auto auto;
+    -ms-grid-columns: 150px 1fr 1fr;
+        grid-template-columns: 150px 1fr 1fr;
+    -webkit-column-gap: 8px;
+            column-gap: 8px;
+  }
+  #grid-div #img-div {
+    width: 150px;
+    height: 225px;
+  }
+  #grid-div #img-div img {
+    width: 100%;
+  }
+  #grid-div #description p {
+    font-size: 1rem;
+  }
+  #grid-div #info h3 {
+    font-size: 1.5rem;
+  }
+  #grid-div #genres p {
+    font-size: 1rem !important;
+  }
+}
 /*# sourceMappingURL=personstyle.css.map */

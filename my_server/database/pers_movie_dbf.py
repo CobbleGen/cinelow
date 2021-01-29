@@ -1,15 +1,19 @@
-from .. import db, app
-from .dbhandler import Movie, Category, MovieCategoryScores, MoviePersonScores, Person
+from .. import db
+from .dbhandler import Movie, Category, MovieCategoryScores, MoviePersonScores, Person, MovieUserScores
+from .user_dbf import getUserById
 from sqlalchemy.sql import func
 import requests
 import json
+import random
 from itertools import islice
+from sqlalchemy import or_
 
 tmdb_key = 'db254eee52d0c8fbc70d51368cd24644'
 
 def add_movie(id):
-    if get_movie(id):
-        return None
+    exi_mov = get_movie(id)
+    if exi_mov:
+        return exi_mov
     respons = requests.get('http://api.themoviedb.org/3/movie/' + str(id) + '?api_key=' + tmdb_key)
     if respons.status_code != 200:
         return None
@@ -59,6 +63,7 @@ def add_movie(id):
         db.session.add(a)
     db.session.add(m)
     db.session.commit()
+    return m
 
 def add_category(id, name):
     new = Category(id = id, name = name)
@@ -98,9 +103,22 @@ def get_movie(id):
     m = Movie.query.filter_by(id=id).first()
     return m
 
-def get_random_related_movies():
-    m1 = Movie.query.order_by(func.random()).first()
-    m2 = Movie.query.order_by(func.random()).first()
+def get_random_related_movies(user = None):
+    not_seen = []
+    if user != None:
+        not_seen = get_not_seen_movies(user.id)
+        m1 = Movie.query.filter(Movie.id.notin_(not_seen)).order_by(func.random()).first()
+    else:
+        m1 = Movie.query.order_by(func.random()).first()
+    respons = requests.get('https://api.themoviedb.org/3/movie/' + str(m1.id) + '/recommendations?api_key=' + tmdb_key + '&language=en-US&page=' + random.choices("12", cum_weights=(0.65, 1.00))[0])
+    if respons.status_code != 200:
+        return None
+    ids = [ r['id'] for r in json.loads(respons.text)['results']]
+    m2 = Movie.query.filter(Movie.id.in_(ids), Movie.id.notin_(not_seen)).order_by(func.random()).first()
+    if m2 == None:
+        print('No related found, taking random instead')
+        not_seen.append(m1.id)
+        m2 = Movie.query.filter(Movie.id.notin_(not_seen)).order_by(func.random()).first()
     return m1, m2
 
 def get_top_movies_by_category(category_id):
@@ -144,7 +162,7 @@ def get_category_score(movie_id, category_id):
             partition_by=MovieCategoryScores.category_id,
         )\
         .label('rank')
-    )
+    ).filter(or_(MovieCategoryScores.votes >= 10, MovieCategoryScores.movie_id == movie_id))
     # now filter
     query = query.filter(MovieCategoryScores.category_id == category_id)
     query = query.order_by(MovieCategoryScores.category_id, 'rank')
@@ -220,8 +238,20 @@ def get_common_people(movie1, movie2):
         people.append(person.serialize)
     return people
 
+def get_user_score(movie_id, user_id):
+    movie = MovieUserScores.query.filter_by(movie_id = movie_id, user_id = user_id).first()
+    if movie:
+        return movie
+    a = MovieUserScores(score = 700, votes = 0, seen = 0)
+    a.movie = get_movie(movie_id)
+    user = getUserById(user_id)
+    a.user = user
+    user.movie_scores.append(a)
+    db.session.add(a)
+    db.session.commit()  
+    return a
 
-def vote_for(win, lose):
+def vote_for(win, lose, user_id = None):
     #Set score for all common categories
     common = get_common_categories(win, lose)
     for category in common:
@@ -232,9 +262,7 @@ def vote_for(win, lose):
         winner.score = winner.score + (32*(1 - probW))
         loser.score = loser.score + (32*(0 - probL))
         winner.votes +=1
-        loser.votes += 1
-        db.session.commit()
-    
+        loser.votes += 1         
     #Set Score for all common people
     common = get_common_people(win, lose)
     for person in common:
@@ -246,4 +274,24 @@ def vote_for(win, lose):
         loser.score = loser.score + (32*(0 - probL))
         winner.votes +=1
         loser.votes += 1
-        db.session.commit()
+    #Set User score
+    if user_id != None:
+        winner = get_user_score(win, user_id)
+        loser = get_user_score(lose, user_id)
+        loser = MovieUserScores.query.filter_by(movie_id = lose, user_id = user_id).first()
+        probW = 1/(1 + (10**((loser.score - winner.score)/400)))
+        probL = 1-probW
+        winner.score = winner.score + (32*(1 - probW))
+        loser.score = loser.score + (32*(0 - probL))
+        winner.votes +=1
+        loser.votes += 1
+        winner.seen = 1
+    db.session.commit()
+
+def seen_movie(movie_id, user_id, seen):
+    get_user_score(movie_id, user_id).seen = seen
+    db.session.commit()
+
+def get_not_seen_movies(user_id):
+    movies = [ r.movie_id for r in MovieUserScores.query.with_entities(MovieUserScores.movie_id).filter(MovieUserScores.user_id == user_id, MovieUserScores.seen == -1)]
+    return movies
