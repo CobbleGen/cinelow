@@ -8,6 +8,28 @@
 
 
 {% block content %}
-    <h2>{{user.username}}</h2>
-    <img id="user-img" src="{{url_for('static', filename='profilepics/' + user.image_file)}}" alt="userimg">
+    <div id="main-wrapper">
+        <div id="left-section">
+            <img id="user-img" src="{{url_for('static', filename='profilepics/' + user.image_file)}}" alt="userimg">
+            <h2>{{user.username}}</h2>
+        </div>
+        <div id="right-section">
+            <h2>Top 10 Movies</h2>
+            <div class="list vert-list">
+                {% for movie in toplist %}
+                    <a href="/m/{{movie.id}}">
+                        <div class="row movie">
+                            <img src="https://image.tmdb.org/t/p/w220_and_h330_face{{movie[0].poster_path}}" alt="{{movie[0].name}}">
+                            <div>
+                                <h3>{{movie[0].name}}</h3>
+                            </div>
+                            <b class="tooltip">{{movie[1] | int}}
+                            <span class="tooltiptext">#{{movie[2]}} in <i>{{user.username}} movies</i>, with a <i>{{user.username}} movie</i> score of {{movie[1] | int}} ({{ movie[3] }} votes)</span>
+                            </b>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

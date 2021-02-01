@@ -781,6 +781,28 @@ nav {
     border-color: rgba(179, 15, 15, 0.5);
 }
 
+@media screen and (max-width: 3000px) {
+    nav {
+        #navbar {
+            width: 1700px;
+        }
+    }
+    #main-block {
+        width: 1600px;
+    }
+}
+
+@media screen and (max-width: 2000px) {
+    nav {
+        #navbar {
+            width: 1400px;
+        }
+    }
+    #main-block {
+        width: 1300px;
+    }
+}
+
 @media screen and (max-width: 1500px) {
     nav {
         #navbar {

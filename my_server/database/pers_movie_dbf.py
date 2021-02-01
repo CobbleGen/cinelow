@@ -105,7 +105,7 @@ def get_movie(id):
 
 def get_random_related_movies(user = None):
     not_seen = []
-    if user != None:
+    if user.is_authenticated:
         not_seen = get_not_seen_movies(user.id)
         m1 = Movie.query.filter(Movie.id.notin_(not_seen)).order_by(func.random()).first()
     else:

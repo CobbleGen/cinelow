@@ -1,6 +1,7 @@
 from .. import db, app
-from .dbhandler import User
+from .dbhandler import User, MovieUserScores
 from flask_login import current_user
+from sqlalchemy.sql import func
 import secrets
 from PIL import Image
 import os
@@ -35,3 +36,22 @@ def save_picture(form_picture):
 
     i.save(picture_path)
     current_user.image_file = picture_name
+
+def get_user_scores(user_id):
+    query = db.session.query(
+    MovieUserScores,
+    func.rank()\
+        .over(
+            order_by=MovieUserScores.score.desc(),
+            partition_by=MovieUserScores.user_id,
+        )\
+        .label('rank')
+    ).filter(MovieUserScores.votes >= 5)
+    # now filter
+    query = query.filter(MovieUserScores.user_id == user_id)
+    query = query.order_by(MovieUserScores.user_id, 'rank')
+    movies = query.all()
+    return movies
+
+get user_total_votes():
+    query = db.session.query(func.sum(MovieUserScores.votes));

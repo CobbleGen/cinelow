@@ -102,7 +102,7 @@ class MovieUserScores(db.Model):
     enough_votes = column_property(votes >= 10)
 
     def __repr__(self):
-        return f'Movie: {self.movie_id} Category: {self.category_id} Score: {self.score}'
+        return f'Movie: {self.movie_id} User: {self.user_id} Score: {self.score}'
 
 
 @login_manager.user_loader
