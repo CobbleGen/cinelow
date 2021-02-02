@@ -20,12 +20,12 @@ def add_movie(id):
         return None
     movie = json.loads(respons.text)
     genres = movie['genres']
-    genres.append({'id': 0, 'name': ''})
+    genres.insert(0, {'id': 0, 'name': ''})
     m = Movie(id = movie['id'], name = movie['original_title'], poster_path=movie['poster_path'])
     for genre in genres:
         cate = Category.query.filter_by(id=genre['id']).first()
         if cate is None:
-            cate = add_category(genre['id'], genre['name'])
+            cate = add_category(genre['name'])
         a = MovieCategoryScores(score=700, votes=0)
         a.movie = m
         a.category = cate
@@ -220,7 +220,7 @@ def get_people_score(movie_id, person_id):
     return my_movie
 
 def get_movie_people(movie_id):
-    people = MoviePersonScores.query.filter_by(movie_id=movie_id).all()
+    people = MoviePersonScores.query.filter_by(movie_id=movie_id).order_by(MoviePersonScores.score).all()
     peoplewi = {
         'actor' : [],
         'director'   : [],
