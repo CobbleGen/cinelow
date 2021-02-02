@@ -2,6 +2,7 @@ from .. import db
 from .dbhandler import Movie, Category, MovieCategoryScores, MoviePersonScores, Person, MovieUserScores
 from .user_dbf import getUserById
 from sqlalchemy.sql import func
+from sqlalchemy.orm import load_only
 import requests
 import json
 import random
@@ -30,7 +31,7 @@ def add_movie(id):
         a.category = cate
         cate.movies.append(a)
         db.session.add(a)
-    
+
     respons = requests.get('http://api.themoviedb.org/3/movie/' + str(id) + '/credits?api_key=' + tmdb_key)
     if respons.status_code != 200:
         return None
@@ -184,11 +185,21 @@ def get_movie_categories_with_score(movie_id):
     return c_scores
 
 def get_common_categories(movie1, movie2):
-    cats = MovieCategoryScores.query.filter(MovieCategoryScores.movie_id.in_([movie1, movie2])).group_by(MovieCategoryScores.category_id).having(func.count(MovieCategoryScores.category_id) > 1).all()
+    cats = db.session.query(MovieCategoryScores.category_id, func.sum(MovieCategoryScores.movie_id)).filter(MovieCategoryScores.movie_id.in_([movie1, movie2])).group_by(MovieCategoryScores.category_id).having(func.count(MovieCategoryScores.category_id) > 1).all()
+    print(cats)
     categories = []
     for cat in cats:
-        categories.append(cat.category.serialize)
+        categories.append(get_category(cat[0]).serialize)
     return categories
+
+def get_common_people(movie1, movie2):
+    myQuery = db.session.query(MoviePersonScores.movie_id, MoviePersonScores.person_id).filter(MoviePersonScores.movie_id.in_([movie1, movie2])).group_by(MoviePersonScores.movie_id, MoviePersonScores.person_id).subquery()
+    peps = db.session.query(myQuery.c.person_id).group_by(myQuery.c.person_id).having(func.count(myQuery.c.person_id) > 1).all()
+    people = []
+    for pep in peps:
+        person = get_person(pep[0])
+        people.append(person.serialize)
+    return people
 
 def get_people_score(movie_id, person_id):
     query = db.session.query(
@@ -218,7 +229,7 @@ def get_movie_people(movie_id):
     for person in people:
         p_score = get_people_score(movie_id, person.person_id)
         peoplewi[convert_job(person.job)].append((person.person, p_score.rank, p_score.score, person.job, p_score.votes, p_score[0]))
-        
+
     return peoplewi
 
 def convert_job(job):
@@ -228,15 +239,6 @@ def convert_job(job):
         return 'writer'
     else:
         return 'actor'
-
-def get_common_people(movie1, movie2):
-    myQuery = MoviePersonScores.query.filter(MoviePersonScores.movie_id.in_([movie1, movie2])).group_by(MoviePersonScores.movie_id, MoviePersonScores.person_id).subquery()
-    peps = db.session.query(myQuery).group_by(myQuery.c.person_id).having(func.count(myQuery.c.person_id) > 1).all()
-    people = []
-    for pep in peps:
-        person = get_person(pep[2])
-        people.append(person.serialize)
-    return people
 
 def get_user_score(movie_id, user_id):
     movie = MovieUserScores.query.filter_by(movie_id = movie_id, user_id = user_id).first()
@@ -248,7 +250,7 @@ def get_user_score(movie_id, user_id):
     a.user = user
     user.movie_scores.append(a)
     db.session.add(a)
-    db.session.commit()  
+    db.session.commit()
     return a
 
 def vote_for(win, lose, user_id = None):
@@ -262,7 +264,7 @@ def vote_for(win, lose, user_id = None):
         winner.score = winner.score + (32*(1 - probW))
         loser.score = loser.score + (32*(0 - probL))
         winner.votes +=1
-        loser.votes += 1         
+        loser.votes += 1
     #Set Score for all common people
     common = get_common_people(win, lose)
     for person in common:

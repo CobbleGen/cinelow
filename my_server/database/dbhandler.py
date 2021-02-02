@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable = False)
-    poster_path = db.Column(db.String(30))
+    poster_path = db.Column(db.String(35))
     categories = relationship("MovieCategoryScores", back_populates="movie")
     people = relationship("MoviePersonScores", back_populates="movie")
 
@@ -52,7 +52,7 @@ class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable = False)
     score = db.Column(db.Integer(), nullable = False)
-    profile_path = db.Column(db.String(30))
+    profile_path = db.Column(db.String(35))
     movies = relationship("MoviePersonScores", back_populates="person")
 
     @property
@@ -118,6 +118,6 @@ def commitDB():
 def resetDB():
     db.drop_all()
     db.create_all()
-    
+
 def create_all():
     db.create_all()
