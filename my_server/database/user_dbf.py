@@ -53,5 +53,6 @@ def get_user_scores(user_id):
     movies = query.all()
     return movies
 
-#get user_total_votes():
-    #query = db.session.query(func.sum(MovieUserScores.votes));
+def get_user_total_votes(user_id):
+    votes = db.session.query(func.sum(MovieUserScores.votes)).filter(MovieUserScores.user_id == user_id).first()[0]
+    return votes/2
