@@ -67,7 +67,7 @@ def add_movie(id):
     return m
 
 def add_category(id, name):
-    new = Category(id = id, name = name)
+    new = Category(name = name)
     db.session.add(new)
     db.session.commit()
     return new
