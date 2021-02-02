@@ -25,7 +25,7 @@ def add_movie(id):
     for genre in genres:
         cate = Category.query.filter_by(id=genre['id']).first()
         if cate is None:
-            cate = add_category(genre['name'])
+            cate = add_category(genre['id'], genre['name'])
         a = MovieCategoryScores(score=700, votes=0)
         a.movie = m
         a.category = cate
@@ -66,8 +66,8 @@ def add_movie(id):
     db.session.commit()
     return m
 
-def add_category(name):
-    new = Category(name = name)
+def add_category(id, name):
+    new = Category(id = id, name = name)
     db.session.add(new)
     db.session.commit()
     return new
