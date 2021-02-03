@@ -17,7 +17,7 @@ def getUserById(uid):
     return user
 
 def getUserByEmail(umail):
-    user = User.query.filter_by(email=umail).first()
+    user = User.query.filter(func.lower(User.email) == func.lower(umail)).first()
     return user
 
 def getUserByUname(uname):

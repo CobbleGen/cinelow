@@ -52,6 +52,8 @@ def user(uname=None):
     if uname == None:
         abort(404)
     user = uf.getUserByUname(uname)
+    if user == None:
+        abort(404)
     toplist = uf.get_user_scores(user.id)
     votes = uf.get_user_total_votes(user.id)
     movie_list = []
