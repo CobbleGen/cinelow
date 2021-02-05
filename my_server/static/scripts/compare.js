@@ -1,6 +1,7 @@
 tmdb_key = "db254eee52d0c8fbc70d51368cd24644";
 let movie1 = null;
 let movie2 = null;
+let ready = true;
 
 function getNewMovies() {
     $.ajax({
@@ -21,6 +22,7 @@ function getNewMovies() {
                 out += e.name + " movie <br />";
             }
             $("#common-tt").html("<a> <h4>Which is the best:</h4>" + out + "</a>");
+            ready = true;
         },
         error: function (response) {
             console.log(response);
@@ -29,42 +31,53 @@ function getNewMovies() {
 }
 getNewMovies();
 
-$('#movie1-box').click(function (e) { 
-    e.preventDefault();
-    voteMovie(movie1.id, movie2.id);
+$('#movie1-box').click(function (e) {
+    if(ready) { 
+        e.preventDefault();
+        voteMovie(movie1.id, movie2.id);
+    }
 });
 $('#movie2-box').click(function (e) { 
-    e.preventDefault();
-    voteMovie(movie2.id, movie1.id);
+    if (ready) {
+        e.preventDefault();
+        voteMovie(movie2.id, movie1.id);
+    }
 });
 $('#ns-movie1').click(function (e) {
-    $.ajax({
-        type: "POST",
-        url: "/_seen_movie",
-        data: {
-            movie_id    : movie1.id,
-            seen_value  : -1
-        },
-        success: function (response) {
-            getNewMovies();
-        }
-    });
+    if (ready) {
+        ready = false;
+        $.ajax({
+            type: "POST",
+            url: "/_seen_movie",
+            data: {
+                movie_id    : movie1.id,
+                seen_value  : -1
+            },
+            success: function (response) {
+                getNewMovies();
+            }
+        });
+    }
 });
 $('#ns-movie2').click(function (e) {
-    $.ajax({
-        type: "POST",
-        url: "/_seen_movie",
-        data: {
-            movie_id    : movie2.id,
-            seen_value  : -1
-        },
-        success: function (response) {
-            getNewMovies();
-        }
-    });
+    if(ready) {
+        ready = false;
+        $.ajax({
+            type: "POST",
+            url: "/_seen_movie",
+            data: {
+                movie_id    : movie2.id,
+                seen_value  : -1
+            },
+            success: function (response) {
+                getNewMovies();
+            }
+        });
+    }
 });
 
 function voteMovie(winning_id, losing_id) {
+    ready = false;
     $.ajax({
         type: "POST",
         url: "/_vote_for_movie",
