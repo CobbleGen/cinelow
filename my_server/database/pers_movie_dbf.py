@@ -294,6 +294,12 @@ def seen_movie(movie_id, user_id, seen):
     get_user_score(movie_id, user_id).seen = seen
     db.session.commit()
 
+def get_seen_movie(movie_id, user_id):
+    score = MovieUserScores.query.filter_by(movie_id = movie_id, user_id = user_id).first()
+    if score:
+        return score.seen
+    return 0
+
 def get_not_seen_movies(user_id):
     movies = [ r.movie_id for r in MovieUserScores.query.with_entities(MovieUserScores.movie_id).filter(MovieUserScores.user_id == user_id, MovieUserScores.seen == -1)]
     return movies

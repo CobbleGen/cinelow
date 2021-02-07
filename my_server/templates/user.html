@@ -19,7 +19,7 @@
             <h2>Top 10 Movies</h2>
             <div class="list vert-list">
                 {% for movie in toplist %}
-                    <a href="/m/{{movie.id}}">
+                    <a href="/m/{{movie[0].id}}">
                         <div class="row movie">
                             <img src="https://image.tmdb.org/t/p/w220_and_h330_face{{movie[0].poster_path}}" alt="{{movie[0].name}}">
                             <div>

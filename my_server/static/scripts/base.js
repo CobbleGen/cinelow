@@ -10,11 +10,9 @@ $("#user-drop").click(function (e) {
     e.preventDefault();
     $("#user-options-box").slideDown().focus();
 });
-$("#menu-bars").mousedown(function (e) { 
+$("#menu-bars").click(function (e) { 
     e.preventDefault();
-    setTimeout(() => {
-        $("#main-menu").slideDown().focus();
-    }, 50);
+    $("#main-menu").slideDown().focus();
 });
 $(".hidden-dropdown").on("blur", function(e) {
     console.log("lost focus");
@@ -143,16 +141,32 @@ $("#search").keyup(function (e) {
     }
 });
 
-
 //Toggle button
 $(".toggle-button").click(function () {
     if ($(this).hasClass("enabled")) {
-        $(this).removeClass("enabled").addClass("disabled");
+        $(this).removeClass("enabled").addClass("crossed").children("span").html("<h4>Not seen.</h4>");
+        clearTimeout(timeout);
+        timeout = setTimeout(sendSeenMovie(-1), 2500);
     } else {
-        $(this).removeClass("disabled").addClass("enabled");
+        $(this).removeClass("disabled").removeClass("crossed").addClass("enabled").children("span").html("<h4>Seen.</h4>");
+        clearTimeout(timeout);
+        timeout = setTimeout(sendSeenMovie(1), 2500);
     }
-    
 });
+
+function sendSeenMovie(seen) {
+    $.ajax({
+        type: "POST",
+        url: "/_seen_movie",
+        data: {
+            movie_id: $("#movie-data").data("id"),
+            seen_value : seen
+        },
+        success: function (response) {
+            
+        }
+    });
+}
 
 
 //"See more" text rutor

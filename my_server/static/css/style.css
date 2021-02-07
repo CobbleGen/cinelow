@@ -521,8 +521,16 @@ nav form i {
   background-color: #ac9d1b;
 }
 
+.enabled .fa-times {
+  display: none;
+}
+
 .disabled {
   background-color: #101010;
+}
+
+.disabled .fa-times {
+  display: none;
 }
 
 .disabled:hover {
@@ -532,6 +540,18 @@ nav form i {
 .disabled:hover > i {
   cursor: pointer;
   color: #ebd620;
+}
+
+.crossed .fa-times {
+  color: #ebd620;
+}
+
+.crossed .fa-check {
+  display: none;
+}
+
+.crossed:hover {
+  cursor: pointer;
 }
 
 .list .person {
@@ -841,7 +861,6 @@ nav form i {
 
 .tooltip {
   position: relative;
-  display: inline-block;
 }
 
 .tooltip .tooltiptext {
@@ -897,6 +916,11 @@ nav form i {
 }
 
 .tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 100%;
+}
+
+.tooltip:active .tooltiptext {
   visibility: visible;
   opacity: 100%;
 }

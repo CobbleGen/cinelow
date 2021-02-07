@@ -27,7 +27,10 @@ def moviePage(movie_id = None):
     if respons.status_code != 200:
         return None
     recomendations = json.loads(respons.text)['results'][0:10]
-    return render_template('movie.html', movie = movie_data, categories = categories, people = people, recomendations = recomendations)
+    seen = 0
+    if current_user.is_authenticated:
+        seen = pmf.get_seen_movie(movie_id, current_user.id)
+    return render_template('movie.html', movie = movie_data, categories = categories, people = people, recomendations = recomendations, seen = seen)
     
 
 @app.route('/p/<person_id>')
@@ -38,10 +41,6 @@ def personPage(person_id = None):
     if respons.status_code != 200:
         abort(404)
     person_data = json.loads(respons.text)
-    #respons = requests.get('http://api.themoviedb.org/3/person/' + person_id + '/movie_credits?api_key=' + tmdb_key)
-    #credits = respons.json()
-    #movies = credits['cast']
-    #movies.sort(key=lambda x: x.get('popularity'), reverse=True)
     return render_template('person.html', person = person_data)
 
 
@@ -97,6 +96,7 @@ def voteMovie():
 def seenMovie():
     mid = request.form['movie_id']
     seen = request.form['seen_value']
+    print(mid + seen)
     if current_user.is_authenticated:
         pmf.seen_movie(mid, current_user.id, seen)
     return 'Success'

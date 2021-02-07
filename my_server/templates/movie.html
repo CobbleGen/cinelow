@@ -8,6 +8,7 @@
 
 
 {% block content %}
+    <data id="movie-data" data-id="{{movie.id}}"></data>
     <div id="headers">
         <div id="top-head">
             <h1>{{movie['original_title']}}</h1>
@@ -23,7 +24,11 @@
         </div>
         <div id="bot-head">
             <a>{{movie['release_date']}} | {{movie['runtime']}} mins </a>
-            <div class="toggle-button disabled" title="Watched?"><i class="fas fa-check"></i></div>
+            <div class="toggle-button {% if seen == 1 %} enabled {% elif seen == -1%} crossed {% else %} disabled {% endif %} tooltip">
+                <i class="fas fa-check"></i>
+                <i class="fas fa-times"></i>
+                <span class="tooltiptext tooltip-bot"><h4>{% if seen == 1 %} Seen. {% elif seen == -1%} Not seen. {% else %} Seen? {% endif %}</h4></span>
+            </div>
         </div>
     </div>
     <div id="grid-div">

@@ -425,10 +425,17 @@ nav {
         cursor: pointer;
         background-color: $hover-yellow;
     }
+    .fa-times {
+        display: none;
+    }
 }
 
 .disabled {
     background-color: $prim-bg;
+
+    .fa-times {
+        display: none;
+    }
 
     &:hover {
         cursor: pointer;
@@ -437,6 +444,19 @@ nav {
     &:hover > i {
         cursor: pointer;
         color: $c-yellow;
+    }
+}
+
+.crossed {
+    .fa-times {
+        color: $c-yellow;
+    }
+    .fa-check {
+        display: none;
+    }
+
+    &:hover {
+        cursor: pointer;
     }
 }
 
@@ -700,7 +720,6 @@ nav {
 
 .tooltip {
     position: relative;
-    display: inline-block;
 
     .tooltiptext {
         padding: 10px;
@@ -754,6 +773,10 @@ nav {
     }
 
     &:hover .tooltiptext {
+        visibility: visible;
+        opacity: 100%;
+    }
+    &:active .tooltiptext {
         visibility: visible;
         opacity: 100%;
     }
