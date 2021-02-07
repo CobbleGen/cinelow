@@ -75,7 +75,9 @@ input[type="file"] {
     }
     #left-section {
         display: flex;
+        flex-flow: column;
         justify-content: center;
+        align-items: center;
         #img-wrapper {
             width: 125px;
             height: 125px;

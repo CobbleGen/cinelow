@@ -60,7 +60,6 @@ def user(uname=None):
     for movie in islice(toplist, 10):
         minfo = movie[0].movie.serialize
         movie_list.append((minfo, movie[0].score, movie[1], movie[0].votes))
-    print(toplist)
     return render_template('user.html', user = user, toplist = movie_list, votes = votes)
 
 @app.route('/account', methods=["POST", "GET"])
