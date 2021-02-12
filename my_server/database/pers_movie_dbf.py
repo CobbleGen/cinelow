@@ -144,7 +144,7 @@ def get_most_watched_movies(dont_include = []):
             partition_by=MovieUserScores.movie_id,
         )\
         .label('average')).filter(MovieUserScores.movie_id.notin_(dont_include)).subquery()
-    result = db.session.query(mquery).group_by(mquery.c.movie_id).order_by(desc(mquery.c.average)).limit(300).all()
+    result = db.session.query(mquery.c.movie_id, func.avg(mquery.c.average)).group_by(mquery.c.movie_id).order_by(desc(mquery.c.average)).limit(300).all()
     return result
 
 def get_top_movies_by_category(category_id):
