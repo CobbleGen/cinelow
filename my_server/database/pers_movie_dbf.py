@@ -115,7 +115,7 @@ def get_random_related_movies(user = None):
         try:
             movie_id = prospects[random.randint(0, math.trunc((1.25*len(prospects))+5))]
             print(movie_id)
-        except:
+        except IndexError:
             most_watched = get_most_watched_movies(not_seen)
             max_x = math.sqrt(len(most_watched)*10)
             print(max_x)
