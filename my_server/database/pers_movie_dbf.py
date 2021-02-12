@@ -112,20 +112,15 @@ def get_random_related_movies(user = None):
         seen = get_seen_movies(user.id, 1)
         top_movs = get_top_movies(user.id)
         prospects = seen + top_movs
-        try:
-            movie_id = prospects[random.randint(0, math.trunc((1.25*len(prospects))+5))]
-            print(movie_id)
-        except IndexError:
+        rand_index = random.randint(0, math.trunc((1.25*len(prospects))+5))
+        if rand_index < len(prospects):
+            movie_id = prospects[rand_index]
+        else:
             most_watched = get_most_watched_movies(not_seen)
             max_x = math.sqrt(len(most_watched)*10)
-            print(max_x)
             rand_x = random.uniform(0, max_x)
             list_id = math.trunc((rand_x**2)*0.1)
-            print(rand_x)
-            print(list_id)
             movie_id = most_watched[list_id][0]
-            print(movie_id)
-            print(most_watched[list_id][1])
         m1 = Movie.query.filter(Movie.id==movie_id).order_by(func.random()).first()
         print(m1)
     else:
