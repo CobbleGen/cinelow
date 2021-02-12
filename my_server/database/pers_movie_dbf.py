@@ -1,13 +1,14 @@
 from .. import db
 from .dbhandler import Movie, Category, MovieCategoryScores, MoviePersonScores, Person, MovieUserScores
-from .user_dbf import getUserById
+from .user_dbf import getUserById, get_top_movies
 from sqlalchemy.sql import func
-from sqlalchemy.orm import load_only
+from sqlalchemy import desc
+from sqlalchemy import or_
+import math
 import requests
 import json
 import random
 from itertools import islice
-from sqlalchemy import or_
 
 tmdb_key = 'db254eee52d0c8fbc70d51368cd24644'
 
@@ -107,8 +108,26 @@ def get_movie(id):
 def get_random_related_movies(user = None):
     not_seen = []
     if user.is_authenticated:
-        not_seen = get_not_seen_movies(user.id)
-        m1 = Movie.query.filter(Movie.id.notin_(not_seen)).order_by(func.random()).first()
+        not_seen = get_seen_movies(user.id, -1)
+        seen = get_seen_movies(user.id, 1)
+        top_movs = get_top_movies(user.id)
+        prospects = seen + top_movs
+        try:
+            movie_id = prospects[random.randint(0, (1.25*len(prospects))+5)]
+            print(movie_id)
+        except:
+            most_watched = get_most_watched_movies(not_seen)
+            max_x = math.sqrt(len(most_watched)*10)
+            print(max_x)
+            rand_x = random.uniform(0, max_x)
+            list_id = math.trunc((rand_x**2)*0.1)
+            print(rand_x)
+            print(list_id)
+            movie_id = most_watched[list_id][0]
+            print(movie_id)
+            print(most_watched[list_id][1])
+        m1 = Movie.query.filter(Movie.id==movie_id).order_by(func.random()).first()
+        print(m1)
     else:
         m1 = Movie.query.order_by(func.random()).first()
     respons = requests.get('https://api.themoviedb.org/3/movie/' + str(m1.id) + '/recommendations?api_key=' + tmdb_key + '&language=en-US&page=' + random.choices("12", cum_weights=(0.65, 1.00))[0])
@@ -121,6 +140,17 @@ def get_random_related_movies(user = None):
         not_seen.append(m1.id)
         m2 = Movie.query.filter(Movie.id.notin_(not_seen)).order_by(func.random()).first()
     return m1, m2
+
+def get_most_watched_movies(dont_include = []):
+    mquery = db.session.query(
+        MovieUserScores.movie_id, 
+        func.avg(MovieUserScores.seen)\
+        .over(
+            partition_by=MovieUserScores.movie_id,
+        )\
+        .label('average')).filter(MovieUserScores.movie_id.notin_(dont_include)).subquery()
+    result = db.session.query(mquery).group_by(mquery.c.movie_id).order_by(desc(mquery.c.average)).limit(300).all()
+    return result
 
 def get_top_movies_by_category(category_id):
     query = db.session.query(
@@ -185,8 +215,10 @@ def get_movie_categories_with_score(movie_id):
     return c_scores
 
 def get_common_categories(movie1, movie2):
-    cats = db.session.query(MovieCategoryScores.category_id, func.sum(MovieCategoryScores.movie_id)).filter(MovieCategoryScores.movie_id.in_([movie1, movie2])).group_by(MovieCategoryScores.category_id).having(func.count(MovieCategoryScores.category_id) > 1).all()
-    print(cats)
+    cats = db.session.query(MovieCategoryScores.category_id, func.sum(MovieCategoryScores.movie_id))\
+        .filter(MovieCategoryScores.movie_id.in_([movie1, movie2]))\
+        .group_by(MovieCategoryScores.category_id)\
+        .having(func.count(MovieCategoryScores.category_id) > 1).all()
     categories = []
     for cat in cats:
         categories.append(get_category(cat[0]).serialize)
@@ -220,7 +252,7 @@ def get_people_score(movie_id, person_id):
     return my_movie
 
 def get_movie_people(movie_id):
-    people = MoviePersonScores.query.filter_by(movie_id=movie_id).order_by(MoviePersonScores.score).all()
+    people = MoviePersonScores.query.filter_by(movie_id=movie_id).order_by(MoviePersonScores.score.desc()).all()
     peoplewi = {
         'actor' : [],
         'director'   : [],
@@ -300,6 +332,6 @@ def get_seen_movie(movie_id, user_id):
         return score.seen
     return 0
 
-def get_not_seen_movies(user_id):
-    movies = [ r.movie_id for r in MovieUserScores.query.with_entities(MovieUserScores.movie_id).filter(MovieUserScores.user_id == user_id, MovieUserScores.seen == -1)]
+def get_seen_movies(user_id, seen_value):
+    movies = [ r.movie_id for r in MovieUserScores.query.with_entities(MovieUserScores.movie_id).filter(MovieUserScores.user_id == user_id, MovieUserScores.seen == seen_value)]
     return movies

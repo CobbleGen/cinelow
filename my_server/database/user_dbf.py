@@ -53,6 +53,10 @@ def get_user_scores(user_id):
     movies = query.all()
     return movies
 
+def get_top_movies(user_id, amount = 30):
+    movies = db.session.query(MovieUserScores.movie_id).filter(MovieUserScores.user_id==user_id).order_by(MovieUserScores.score.desc()).limit(amount).all()
+    return [i[0] for i in movies]
+
 def get_user_total_votes(user_id):
     votes = db.session.query(func.sum(MovieUserScores.votes)).filter(MovieUserScores.user_id == user_id).first()[0]
     if votes:
