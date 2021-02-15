@@ -140,14 +140,14 @@ def get_random_related_movies(user = None):
 
 def get_most_watched_movies(dont_include = []):
     mquery = db.session.query(
-        MovieUserScores.movie_id, 
+        MovieUserScores.movie_id,
         func.avg(MovieUserScores.seen)\
         .over(
             partition_by=MovieUserScores.movie_id,
         )\
         .label('average')).filter(MovieUserScores.movie_id.notin_(dont_include)).subquery()
-    result = db.session.query(mquery.c.movie_id, func.max(mquery.c.average))\
-        .order_by(desc(mquery.c.average)).group_by(mquery.c.movie_id).limit(300).all()
+    result = db.session.query(mquery.c.movie_id, mquery.c.average)\
+        .order_by(desc(mquery.c.average)).group_by(mquery.c.movie_id, mquery.c.average).limit(300).all()
     return result
 
 def get_top_movies_by_category(category_id):
