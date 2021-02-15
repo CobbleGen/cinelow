@@ -105,6 +105,13 @@ def get_movie(id):
     m = Movie.query.filter_by(id=id).first()
     return m
 
+def get_relevant_movie(except_for = []):
+    most_watched = get_most_watched_movies(except_for)
+    max_x = math.sqrt(len(most_watched)*10)
+    rand_x = random.uniform(0, max_x)
+    list_id = math.trunc((rand_x**2)*0.1)
+    return most_watched[list_id][0]
+
 def get_random_related_movies(user = None):
     not_seen = []
     if user.is_authenticated:
@@ -116,15 +123,10 @@ def get_random_related_movies(user = None):
         if rand_index < len(prospects):
             movie_id = prospects[rand_index]
         else:
-            most_watched = get_most_watched_movies(not_seen)
-            max_x = math.sqrt(len(most_watched)*10)
-            rand_x = random.uniform(0, max_x)
-            list_id = math.trunc((rand_x**2)*0.1)
-            movie_id = most_watched[list_id][0]
-        m1 = Movie.query.filter(Movie.id==movie_id).order_by(func.random()).first()
-        print(m1)
+            movie_id = get_relevant_movie(not_seen)
     else:
-        m1 = Movie.query.order_by(func.random()).first()
+        movie_id = get_relevant_movie()
+    m1 = Movie.query.filter(Movie.id==movie_id).order_by(func.random()).first()
     respons = requests.get('https://api.themoviedb.org/3/movie/' + str(m1.id) + '/recommendations?api_key=' + tmdb_key + '&language=en-US&page=' + random.choices("12", cum_weights=(0.65, 1.00))[0])
     if respons.status_code != 200:
         return None
@@ -144,7 +146,8 @@ def get_most_watched_movies(dont_include = []):
             partition_by=MovieUserScores.movie_id,
         )\
         .label('average')).filter(MovieUserScores.movie_id.notin_(dont_include)).subquery()
-    result = db.session.query(mquery.c.movie_id, func.avg(mquery.c.average)).order_by(desc(mquery.c.average)).group_by(mquery.c.movie_id).limit(300).all()
+    result = db.session.query(mquery.c.movie_id, func.max(mquery.c.average))\
+        .order_by(desc(mquery.c.average)).group_by(mquery.c.movie_id).limit(300).all()
     return result
 
 def get_top_movies_by_category(category_id):
