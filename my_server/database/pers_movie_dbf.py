@@ -135,7 +135,7 @@ def get_random_related_movies(user = None):
     if m2 == None:
         print('No related found, taking random instead')
         not_seen.append(m1.id)
-        m2 = Movie.query.filter(Movie.id.notin_(not_seen)).order_by(func.random()).first()
+        m2 = get_relevant_movie(not_seen)
     return m1, m2
 
 def get_most_watched_movies(dont_include = []):
