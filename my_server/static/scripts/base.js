@@ -81,20 +81,22 @@ $("#search").keyup(function (e) {
                             let current = 0;
 
                             while (current < (arr1.length + arr2.length) && current < 20) {
-                                if (index2 >= arr2.length || index1 >= arr1.length) {
+                                if (arr2.length < 1 || arr1.length < 1) {
+                                    console.log(arr1);
+                                    merged = merged.concat(arr1);
+                                    merged = merged.concat(arr2);
                                     break;
                                 }
-                                if(arr1[index1].popularity > arr2[index2].popularity) {
-                                    merged[current] = arr1[index1];
+                                if(arr1[0].popularity > arr2[0].popularity) {
+                                    merged[current] = arr1.shift();
                                     index1++;
                                 } else {
-                                    merged[current] = arr2[index2];
+                                    merged[current] = arr2.shift();
                                     index2++;
                                 }
-
                                 current++;
                             }
-
+                            console.log(merged);
                             $("#search-results").empty();
                             //console.log(merged);
                             let newDiv = null;
@@ -105,17 +107,17 @@ $("#search").keyup(function (e) {
                                         <a href="/m/${result.id}">
                                             <div class="searched movie">
                                                 <div class="searched-img">
-                                                    <img src="https://image.tmdb.org/t/p/w94_and_h141_bestv2${result.poster_path}" alt="${result["original_title}"]}">
+                                                    <img src="https://image.tmdb.org/t/p/w94_and_h141_bestv2${result.poster_path}" alt="${result["title}"]}">
                                                 </div>
                                                 <div class="searched-content">
-                                                    <div class="searched-headline"><h4>${result.original_title}</h4> <p>(${result.release_date.slice(0, 4)})</p></div>
+                                                    <div class="searched-headline"><h4>${result.title}</h4> <p>(${result.release_date.slice(0, 4)})</p></div>
                                                     <p>${result.overview}</p>
                                                 </div>
                                             </div>
                                         </a>
                                         `);
                                 } else {
-                                    let knownFor = result.known_for.map(a => a.original_title).join(", ");
+                                    let knownFor = result.known_for.map(a => a.title).join(", ");
                                     newDiv = $("<div>").html(`
                                         <a href="/p/${result.id}">
                                             <div class="searched person">

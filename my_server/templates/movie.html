@@ -4,14 +4,14 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/moviestyle.css') }}">
 {% endblock %}
 
-{% block title %}{{movie['original_title']}}{% endblock %}
+{% block title %}{{movie['title']}}{% endblock %}
 
 
 {% block content %}
     <data id="movie-data" data-id="{{movie.id}}"></data>
     <div id="headers">
         <div id="top-head">
-            <h1>{{movie['original_title']}}</h1>
+            <h1>{{movie['title']}}</h1>
             <a class="tooltip">
                 {% if categories[0][4] %}
                     {{ categories[0][2] | int}} | #{{ categories[0][1] | int}}
@@ -120,7 +120,7 @@
             {% for movie in recomendations %}
                 <a href="/m/{{movie['id']}}">
                     <div class="row movie">
-                        <img src="https://image.tmdb.org/t/p/w220_and_h330_face{{movie['poster_path']}}" alt="{{movie['original_title']}}">
+                        <img src="https://image.tmdb.org/t/p/w220_and_h330_face{{movie['poster_path']}}" alt="{{movie['title']}}">
                     </div>
                 </a>
             {% endfor %}

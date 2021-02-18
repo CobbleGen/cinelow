@@ -1,3 +1,4 @@
+from operator import and_
 from .. import db
 from .dbhandler import Movie, Category, MovieCategoryScores, MoviePersonScores, Person, MovieUserScores
 from .user_dbf import getUserById, get_top_movies
@@ -22,7 +23,7 @@ def add_movie(id):
     movie = json.loads(respons.text)
     genres = movie['genres']
     genres.insert(0, {'id': 0, 'name': ''})
-    m = Movie(id = movie['id'], name = movie['original_title'], poster_path=movie['poster_path'])
+    m = Movie(id = movie['id'], name = movie['title'], poster_path=movie['poster_path'])
     for genre in genres:
         cate = Category.query.filter_by(id=genre['id']).first()
         if cate is None:
@@ -126,17 +127,33 @@ def get_random_related_movies(user = None):
             movie_id = get_relevant_movie(not_seen)
     else:
         movie_id = get_relevant_movie()
-    m1 = Movie.query.filter(Movie.id==movie_id).order_by(func.random()).first()
+    m1 = Movie.query.filter(Movie.id==movie_id).first()
     respons = requests.get('https://api.themoviedb.org/3/movie/' + str(m1.id) + '/recommendations?api_key=' + tmdb_key + '&language=en-US&page=' + random.choices("12", cum_weights=(0.65, 1.00))[0])
     if respons.status_code != 200:
         return None
     ids = [ r['id'] for r in json.loads(respons.text)['results']]
     m2 = Movie.query.filter(Movie.id.in_(ids), Movie.id.notin_(not_seen)).order_by(func.random()).first()
+
     if m2 == None:
         print('No related found, taking random instead')
         not_seen.append(m1.id)
         m2 = get_relevant_movie(not_seen)
     return m1, m2
+
+def get_random_related_movie(to_movie):
+    #category_id = to_movie.categories[random.randint(1, len(to_movie.categories)-1)].category_id
+    category_ids = [ i.category_id for i in to_movie.categories ]
+    person_query = db.session.query(MoviePersonScores.movie_id)\
+        .filter(MoviePersonScores.person_id.in_([ p.person_id for p in to_movie.people ])).all()
+    people_ids = [ i[0] for i in person_query ]
+    movies = db.session.query(MovieCategoryScores.movie_id)\
+        .filter(and_(MovieCategoryScores.movie_id.in_(people_ids), MovieCategoryScores.category_id.in_(category_ids))).all()
+    return movies
+
+def get_related_movies(base, movies, amount):
+    for movie in movies:
+        pass
+    return Category.query.filter(Category.id == 0).first().movies
 
 def get_most_watched_movies(dont_include = []):
     mquery = db.session.query(

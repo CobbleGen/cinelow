@@ -53,6 +53,9 @@ def compare():
 def toplist(ctype='category', tid='0'):
     return render_template('toplist.html', ctype=ctype, tid=tid)
 
+
+### START OF AJAX REQUESTS ###
+
 @app.route('/_getmovies')
 def getMovs():
     m1, m2 = pmf.get_random_related_movies(current_user)
