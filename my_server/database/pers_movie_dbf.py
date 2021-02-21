@@ -1,4 +1,7 @@
 from operator import and_
+from sqlalchemy.sql.elements import False_
+
+from sqlalchemy.sql.expression import insert
 from .. import db
 from .dbhandler import Movie, Category, MovieCategoryScores, MoviePersonScores, Person, MovieUserScores
 from .user_dbf import getUserById, get_top_movies
@@ -12,6 +15,10 @@ import random
 from itertools import islice
 
 tmdb_key = 'db254eee52d0c8fbc70d51368cd24644'
+
+#-------------------------------------------------#
+#------------GET / ADD FUNCTIONS -----------------#
+#-------------------------------------------------#
 
 def add_movie(id):
     exi_mov = get_movie(id)
@@ -106,6 +113,37 @@ def get_movie(id):
     m = Movie.query.filter_by(id=id).first()
     return m
 
+def get_movie_categories(movie_id):
+    categories = Movie.query.filter_by(id=movie_id).first().categories
+    return categories
+
+def get_common_categories(movie1, movie2):
+    cats = db.session.query(MovieCategoryScores.category_id, func.sum(MovieCategoryScores.movie_id))\
+        .filter(MovieCategoryScores.movie_id.in_([movie1, movie2]))\
+        .group_by(MovieCategoryScores.category_id)\
+        .having(func.count(MovieCategoryScores.category_id) > 1).all()
+    categories = []
+    for cat in cats:
+        categories.append(get_category(cat[0]).serialize)
+    return categories
+
+def get_common_people(movie1, movie2):
+    myQuery = db.session.query(MoviePersonScores.movie_id, MoviePersonScores.person_id).filter(MoviePersonScores.movie_id.in_([movie1, movie2])).group_by(MoviePersonScores.movie_id, MoviePersonScores.person_id).subquery()
+    peps = db.session.query(myQuery.c.person_id).group_by(myQuery.c.person_id).having(func.count(myQuery.c.person_id) > 1).all()
+    people = []
+    for pep in peps:
+        person = get_person(pep[0])
+        people.append(person.serialize)
+    return people
+
+
+
+
+
+#-------------------------------------------------#
+#------- RECOMMENDATIONS / RELEVANCY -------------#
+#-------------------------------------------------#
+
 def get_relevant_movie(except_for = []):
     most_watched = get_most_watched_movies(except_for)
     max_x = math.sqrt(len(most_watched)*10)
@@ -120,7 +158,7 @@ def get_random_related_movies(user = None):
         seen = get_seen_movies(user.id, 1)
         top_movs = get_top_movies(user.id)
         prospects = seen + top_movs
-        rand_index = random.randint(0, math.trunc((1.25*len(prospects))+5))
+        rand_index = random.randint(0, math.trunc((1.35*len(prospects))+7))
         if rand_index < len(prospects):
             movie_id = prospects[rand_index]
         else:
@@ -133,13 +171,13 @@ def get_random_related_movies(user = None):
         return None
     ids = [ r['id'] for r in json.loads(respons.text)['results']]
     m2 = Movie.query.filter(Movie.id.in_(ids), Movie.id.notin_(not_seen)).order_by(func.random()).first()
-
     if m2 == None:
         print('No related found, taking random instead')
         not_seen.append(m1.id)
         m2 = get_relevant_movie(not_seen)
     return m1, m2
 
+###   Not yet implemented or working
 def get_random_related_movie(to_movie):
     #category_id = to_movie.categories[random.randint(1, len(to_movie.categories)-1)].category_id
     category_ids = [ i.category_id for i in to_movie.categories ]
@@ -150,12 +188,51 @@ def get_random_related_movie(to_movie):
         .filter(and_(MovieCategoryScores.movie_id.in_(people_ids), MovieCategoryScores.category_id.in_(category_ids))).all()
     return movies
 
-def get_related_movies(base, movies, amount):
-    for movie in movies:
-        pass
-    return Category.query.filter(Category.id == 0).first().movies
+def get_related_movies(movies, exclude = [], amount = 10):
+    mentions = {}
+    for movie_id in movies:
+        respons = requests.get('https://api.themoviedb.org/3/movie/' + str(movie_id) + '/recommendations?api_key=' + tmdb_key + '&language=en-US&page=1')
+        if respons.status_code == 200:
+            for m in json.loads(respons.text)['results']:
+                mid = m['id']
+                if mid in exclude:
+                    continue
+                val = mentions.setdefault(mid, 0)
+                mentions[mid] = val+1
+    toplist = [(0,0)]
+    for key in mentions:
+        movie_score = MovieCategoryScores.query.with_entities(MovieCategoryScores.score).filter(MovieCategoryScores.movie_id==key, MovieCategoryScores.category_id == 0).first()
+        if movie_score == None:
+            continue
+        movie_score = movie_score[0]
+        rating = ((mentions[key] -1) * movie_score)/4 + movie_score
+        movie = (key, rating)
+        if rating < toplist[amount-1][1]: continue
+        for i, m in enumerate(toplist):
+            if i >= amount: break
+            if m[1] < movie[1]:
+                toplist.insert(i, movie)
+                break
+    toplist.remove((0,0))
+    return toplist[0:amount]
 
-def get_most_watched_movies(dont_include = []):
+def get_user_recommendations(user_id, amount = 10):
+    seen = get_seen_movies(user_id, 1)
+    user_top = get_top_movies(user_id, 15)
+    related = get_related_movies(user_top, seen, amount)
+    if len(related) < amount:
+        needed = amount-len(related)
+        most_watched = get_most_watched_movies([], needed)
+        related.extend(most_watched)
+    output = []
+    print(related)
+    for m in related:
+        movie = get_movie(m[0])
+        output.append(movie.serialize)
+    return output
+
+
+def get_most_watched_movies(dont_include = [], limit = 300):
     mquery = db.session.query(
         MovieUserScores.movie_id,
         func.avg(MovieUserScores.seen)\
@@ -164,8 +241,17 @@ def get_most_watched_movies(dont_include = []):
         )\
         .label('average')).filter(MovieUserScores.movie_id.notin_(dont_include)).subquery()
     result = db.session.query(mquery.c.movie_id, mquery.c.average)\
-        .order_by(desc(mquery.c.average)).group_by(mquery.c.movie_id, mquery.c.average).limit(300).all()
+        .order_by(desc(mquery.c.average)).group_by(mquery.c.movie_id, mquery.c.average).limit(limit).all()
     return result
+
+
+
+
+
+
+#-------------------------------------------------#
+#--------- SCORE GETTING / SETTING ---------------#
+#-------------------------------------------------#
 
 def get_top_movies_by_category(category_id):
     query = db.session.query(
@@ -217,10 +303,6 @@ def get_category_score(movie_id, category_id):
     my_movie = new_query.first()
     return my_movie
 
-def get_movie_categories(movie_id):
-    categories = Movie.query.filter_by(id=movie_id).first().categories
-    return categories
-
 def get_movie_categories_with_score(movie_id):
     categories = Movie.query.filter_by(id=movie_id).first().categories
     c_scores = []
@@ -229,24 +311,6 @@ def get_movie_categories_with_score(movie_id):
         c_scores.append((category.category, c_score.rank, c_score.score, c_score.votes, c_score[0]))
     return c_scores
 
-def get_common_categories(movie1, movie2):
-    cats = db.session.query(MovieCategoryScores.category_id, func.sum(MovieCategoryScores.movie_id))\
-        .filter(MovieCategoryScores.movie_id.in_([movie1, movie2]))\
-        .group_by(MovieCategoryScores.category_id)\
-        .having(func.count(MovieCategoryScores.category_id) > 1).all()
-    categories = []
-    for cat in cats:
-        categories.append(get_category(cat[0]).serialize)
-    return categories
-
-def get_common_people(movie1, movie2):
-    myQuery = db.session.query(MoviePersonScores.movie_id, MoviePersonScores.person_id).filter(MoviePersonScores.movie_id.in_([movie1, movie2])).group_by(MoviePersonScores.movie_id, MoviePersonScores.person_id).subquery()
-    peps = db.session.query(myQuery.c.person_id).group_by(myQuery.c.person_id).having(func.count(myQuery.c.person_id) > 1).all()
-    people = []
-    for pep in peps:
-        person = get_person(pep[0])
-        people.append(person.serialize)
-    return people
 
 def get_people_score(movie_id, person_id):
     query = db.session.query(
@@ -276,7 +340,6 @@ def get_movie_people(movie_id):
     for person in people:
         p_score = get_people_score(movie_id, person.person_id)
         peoplewi[convert_job(person.job)].append((person.person, p_score.rank, p_score.score, person.job, p_score.votes, p_score[0]))
-
     return peoplewi
 
 def convert_job(job):
@@ -299,6 +362,14 @@ def get_user_score(movie_id, user_id):
     db.session.add(a)
     db.session.commit()
     return a
+
+
+
+
+
+#-------------------------------------------------#
+#----------- VOTING AND SEEN MOVIE ---------------#
+#-------------------------------------------------#
 
 def vote_for(win, lose, user_id = None):
     #Set score for all common categories

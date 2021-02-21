@@ -76,9 +76,12 @@ def getTopList():
     if request.args['type'] == 'person':
         movies = pmf.get_top_movies_by_person(data_id)
         category = pmf.get_person(data_id).name
-    else:
+    elif request.args['type'] == 'category':
         movies = pmf.get_top_movies_by_category(data_id)
         category = pmf.get_category(data_id).name
+    elif request.args['type'] == 'recommended':
+        movies = pmf.get_user_recommendations(data_id, max_amount)
+        return {'category': 'rec', 'movies': movies}
     movie_list = []
     for movie in islice(movies, max_amount):
         minfo = movie[0].movie.serialize

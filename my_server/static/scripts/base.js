@@ -227,13 +227,45 @@ function showScore(score, count, show) {
     }
 }
 
+function displayLists(movies, list, show, show_name, category) {
+    for (let i = 0; i < movies.length; i++) {
+        const e = movies[i];
+        if(category != "rec") {
+            list.append(`
+            <a href="/m/${e[0].id}">
+                <div class="row movie">
+                    <img src="https://image.tmdb.org/t/p/w220_and_h330_face${e[0].poster_path}" alt="${e[0].name}">
+                    <div>
+                        <h3>${show_name ? e[0].name : ""}</h3>
+                    </div>
+                    <b class="tooltip">${showScore(e[1], e[2], show)}
+                    <span class="tooltiptext">#${e[2]} in <i>${category} movies</i>, with a <i>${category} movie</i> score of ${Math.round(e[1])} (${ e[3] } votes)</span>
+                    </b>
+                </div>
+            </a>
+            `)
+        } else {
+            list.append(`
+            <a href="/m/${e.id}">
+                <div class="row movie">
+                    <img src="https://image.tmdb.org/t/p/w220_and_h330_face${e.poster_path}" alt="${e.name}">
+                    <div>
+                        <h3>${show_name ? e.name : ""}</h3>
+                    </div>
+                </div>
+            </a>
+            `)
+        }
+    }
+}
+
 function movieLists() {
     $(".movie-list").each(function() {
         list = $(this);
         type = list.data("type");
         data_id = list.data("id");
         amount = list.data("amount");
-        show = list.data("show_score");
+        show = list.data("show_score") ?? 1;
         show_name = list.data("sname") ?? 1;
         $.ajax({
             async: false,
@@ -246,23 +278,7 @@ function movieLists() {
                 amount  : amount
             },
             success: function (response) {
-                movies = response.movies;
-                for (let i = 0; i < movies.length; i++) {
-                    const e = movies[i];
-                    list.append(`
-                    <a href="/m/${e[0].id}">
-                        <div class="row movie">
-                            <img src="https://image.tmdb.org/t/p/w220_and_h330_face${e[0].poster_path}" alt="${e[0].name}">
-                            <div>
-                                <h3>${show_name ? e[0].name : ""}</h3>
-                            </div>
-                            <b class="tooltip">${showScore(e[1], e[2], show)}
-                            <span class="tooltiptext">#${e[2]} in <i>${response.category} movies</i>, with a <i>${response.category} movie</i> score of ${Math.round(e[1])} (${ e[3] } votes)</span>
-                            </b>
-                        </div>
-                    </a>
-                    `)
-                }
+                displayLists(response.movies, list, show, show_name, response.category);
             }
         });
     });
