@@ -207,7 +207,7 @@ def get_related_movies(movies, exclude = [], amount = 10):
         movie_score = movie_score[0]
         rating = ((mentions[key] -1) * movie_score)/4 + movie_score
         movie = (key, rating)
-        if rating < toplist[amount-1][1]: continue
+        if len(toplist)>=amount and rating < toplist[amount-1][1]: continue
         for i, m in enumerate(toplist):
             if i >= amount: break
             if m[1] < movie[1]:
