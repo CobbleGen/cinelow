@@ -7,6 +7,11 @@ from PIL import Image
 import os
 
 
+
+#-------------------------------------------------#
+#--------------- USER INFORMATION ----------------#
+#-------------------------------------------------#
+
 def createUser(uname, email, password):
     new = User(username=uname, email=email, password=password)
     db.session.add(new)
@@ -37,6 +42,16 @@ def save_picture(form_picture):
     i.save(picture_path)
     current_user.image_file = picture_name
 
+
+
+
+
+
+
+#-------------------------------------------------#
+#-------------- USER MOVIE INFO ------------------#
+#-------------------------------------------------#
+
 def get_user_scores(user_id):
     query = db.session.query(
     MovieUserScores,
@@ -47,7 +62,6 @@ def get_user_scores(user_id):
         )\
         .label('rank')
     ).filter(MovieUserScores.votes >= 5)
-    # now filter
     query = query.filter(MovieUserScores.user_id == user_id)
     query = query.order_by(MovieUserScores.user_id, 'rank')
     movies = query.all()
@@ -62,3 +76,21 @@ def get_user_total_votes(user_id):
     if votes:
         return int(votes/2)
     return 0
+
+def get_fav_actors(user_id, amount = 10): #TODO : Fix
+    movies = get_top_movies(user_id, 15)
+    mentions = {}
+    for movie in movies:
+        people = movie.movie.people 
+        for m in people:
+            pid = m['id']
+            val = mentions.setdefault(pid, 0)
+            mentions[pid] = val+1
+    toplist = [(0,0)]
+    for i, m in enumerate(toplist):
+        if i >= amount: break
+        if m[1] < movie[1]:
+            toplist.insert(i, movie)
+            break
+    toplist.remove((0,0))
+    return toplist[0:amount]

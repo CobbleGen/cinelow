@@ -225,7 +225,6 @@ def get_user_recommendations(user_id, amount = 10):
         most_watched = get_most_watched_movies([], needed)
         related.extend(most_watched)
     output = []
-    print(related)
     for m in related:
         movie = get_movie(m[0])
         output.append(movie.serialize)
