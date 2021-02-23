@@ -64,7 +64,7 @@ class Person(db.Model):
         }
 
     def __repr__(self):
-        return f'Movie: {self.name}'
+        return f'Person: {self.name}'
 
 class MovieCategoryScores(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), primary_key=True)

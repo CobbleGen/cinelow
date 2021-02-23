@@ -73,6 +73,7 @@ def getMovs():
 def getTopList():
     data_id = int(request.args['data_id'])
     max_amount = int(request.args['amount'])
+    movies = []
     if request.args['type'] == 'person':
         movies = pmf.get_top_movies_by_person(data_id)
         category = pmf.get_person(data_id).name

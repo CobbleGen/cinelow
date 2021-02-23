@@ -1,5 +1,6 @@
 from .. import db, app
 from .dbhandler import User, MovieUserScores
+import my_server.database.pers_movie_dbf as pmf
 from flask_login import current_user
 from sqlalchemy.sql import func
 import secrets
@@ -77,20 +78,22 @@ def get_user_total_votes(user_id):
         return int(votes/2)
     return 0
 
-def get_fav_actors(user_id, amount = 10): #TODO : Fix
-    movies = get_top_movies(user_id, 15)
+def get_fav_people(user_id, person_type = 0, amount = 10):
+    movies = get_top_movies(user_id, 50)
     mentions = {}
     for movie in movies:
-        people = movie.movie.people 
+        people = pmf.get_movie_people(movie)[pmf.convert_job(str(person_type))]
         for m in people:
-            pid = m['id']
+            pid = m[0].id
             val = mentions.setdefault(pid, 0)
             mentions[pid] = val+1
     toplist = [(0,0)]
-    for i, m in enumerate(toplist):
-        if i >= amount: break
-        if m[1] < movie[1]:
-            toplist.insert(i, movie)
-            break
+    for m in mentions:
+        if mentions[m] < toplist[-1][1]: continue
+        for i, p in enumerate(toplist):
+            if i >= amount: break
+            if p[1] < mentions[m]:
+                toplist.insert(i, (m, mentions[m]))
+                break
     toplist.remove((0,0))
     return toplist[0:amount]

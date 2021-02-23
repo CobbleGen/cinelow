@@ -4,7 +4,7 @@ from sqlalchemy.sql.elements import False_
 from sqlalchemy.sql.expression import insert
 from .. import db
 from .dbhandler import Movie, Category, MovieCategoryScores, MoviePersonScores, Person, MovieUserScores
-from .user_dbf import getUserById, get_top_movies
+import my_server.database.user_dbf as uf
 from sqlalchemy.sql import func
 from sqlalchemy import desc
 from sqlalchemy import or_
@@ -156,7 +156,7 @@ def get_random_related_movies(user = None):
     if user.is_authenticated:
         not_seen = get_seen_movies(user.id, -1)
         seen = get_seen_movies(user.id, 1)
-        top_movs = get_top_movies(user.id)
+        top_movs = uf.get_top_movies(user.id)
         prospects = seen + top_movs
         rand_index = random.randint(0, math.trunc((1.35*len(prospects))+7))
         if rand_index < len(prospects):
@@ -174,7 +174,7 @@ def get_random_related_movies(user = None):
     if m2 == None:
         print('No related found, taking random instead')
         not_seen.append(m1.id)
-        m2 = get_relevant_movie(not_seen)
+        m2 = get_movie(get_relevant_movie(not_seen))
     return m1, m2
 
 ###   Not yet implemented or working
@@ -195,8 +195,7 @@ def get_related_movies(movies, exclude = [], amount = 10):
         if respons.status_code == 200:
             for m in json.loads(respons.text)['results']:
                 mid = m['id']
-                if mid in exclude:
-                    continue
+                if mid in exclude: continue
                 val = mentions.setdefault(mid, 0)
                 mentions[mid] = val+1
     toplist = [(0,0)]
@@ -218,7 +217,7 @@ def get_related_movies(movies, exclude = [], amount = 10):
 
 def get_user_recommendations(user_id, amount = 10):
     seen = get_seen_movies(user_id, 1)
-    user_top = get_top_movies(user_id, 15)
+    user_top = uf.get_top_movies(user_id, 15)
     related = get_related_movies(user_top, seen, amount)
     if len(related) < amount:
         needed = amount-len(related)
@@ -355,7 +354,7 @@ def get_user_score(movie_id, user_id):
         return movie
     a = MovieUserScores(score = 700, votes = 0, seen = 0)
     a.movie = get_movie(movie_id)
-    user = getUserById(user_id)
+    user = uf.getUserById(user_id)
     a.user = user
     user.movie_scores.append(a)
     db.session.add(a)
@@ -418,5 +417,6 @@ def get_seen_movie(movie_id, user_id):
     return 0
 
 def get_seen_movies(user_id, seen_value):
-    movies = [ r.movie_id for r in MovieUserScores.query.with_entities(MovieUserScores.movie_id).filter(MovieUserScores.user_id == user_id, MovieUserScores.seen == seen_value)]
+    movies = [ r.movie_id for r in MovieUserScores.query.with_entities(MovieUserScores.movie_id).filter(and_(MovieUserScores.user_id == user_id, MovieUserScores.seen == seen_value))]
+    print(movies)
     return movies
