@@ -74,6 +74,7 @@ def getTopList():
     data_id = int(request.args['data_id'])
     max_amount = int(request.args['amount'])
     movies = []
+    category = ""
     if request.args['type'] == 'person':
         movies = pmf.get_top_movies_by_person(data_id)
         category = pmf.get_person(data_id).name
@@ -103,7 +104,6 @@ def voteMovie():
 def seenMovie():
     mid = request.form['movie_id']
     seen = request.form['seen_value']
-    print(mid + seen)
     if current_user.is_authenticated:
         pmf.seen_movie(mid, current_user.id, seen)
     return 'Success'

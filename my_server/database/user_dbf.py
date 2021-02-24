@@ -79,14 +79,14 @@ def get_user_total_votes(user_id):
     return 0
 
 def get_fav_people(user_id, person_type = 0, amount = 10):
-    movies = get_top_movies(user_id, 50)
+    movies = get_top_movies(user_id, 100)
     mentions = {}
-    for movie in movies:
+    for idx, movie in enumerate(movies):
         people = pmf.get_movie_people(movie)[pmf.convert_job(str(person_type))]
         for m in people:
             pid = m[0].id
-            val = mentions.setdefault(pid, 0)
-            mentions[pid] = val+1
+            val = mentions.setdefault(pid, abs(100-idx))
+            mentions[pid] = val+ abs(100-idx)
     toplist = [(0,0)]
     for m in mentions:
         if mentions[m] < toplist[-1][1]: continue
