@@ -54,10 +54,30 @@ input[type="file"] {
 
 #right-section {
     width: 100%;
+    .list {
+        .person {
+            margin-bottom: 0!important;
+            img {
+                display: none;
+            }
+        }
+        .row {
+            div {
+                padding-left: 0;
+            }
+        }
+        .movie {
+            height: 20px;
+            img {
+                display: none!important;
+            }
+        }
+    }
 }
 
 #left-section {
     padding: 10px;
+    min-width: 270px;
 }
 
 .error-msg {

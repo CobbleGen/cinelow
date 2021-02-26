@@ -269,7 +269,7 @@ def get_top_movies_by_category(category_id):
 
 def get_top_movies_by_person(person_id):
     query = db.session.query(
-    MoviePersonScores,
+    MoviePersonScores, 
     func.rank()\
         .over(
             order_by=MoviePersonScores.score.desc(),

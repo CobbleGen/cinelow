@@ -1,3 +1,4 @@
+from my_server.database.pers_movie_dbf import get_person
 from my_server import app
 from my_server.database import dbhandler as dbh, user_dbf as uf
 from flask import Blueprint, request, url_for, flash, redirect, session, render_template, abort
@@ -60,7 +61,17 @@ def user(uname=None):
     for movie in islice(toplist, 10):
         minfo = movie[0].movie.serialize
         movie_list.append((minfo, movie[0].score, movie[1], movie[0].votes))
-    return render_template('user.html', user = user, toplist = movie_list, votes = votes)
+    actors = uf.get_fav_people(user.id)
+    ac_list = []
+    for ac_id in actors:
+        p = get_person(ac_id[0]).serialize
+        ac_list.append(p)
+    directors = uf.get_fav_people(user.id, 1, 5)
+    dc_list = []
+    for ac_id in directors:
+        p = get_person(ac_id[0]).serialize
+        dc_list.append(p)
+    return render_template('user.html', user = user, toplist = movie_list, votes = votes, top_actors=ac_list, top_directors = dc_list)
 
 @app.route('/account', methods=["POST", "GET"])
 @login_required

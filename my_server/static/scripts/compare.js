@@ -7,7 +7,7 @@ function getNewMovies() {
     $.ajax({
         type: "GET",
         url: "/_getmovies",
-        dataType: "json",§
+        dataType: "json",
         success: function (response) {
             movie1 = response.m1;
             movie2 = response.m2;

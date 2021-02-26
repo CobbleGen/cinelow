@@ -59,8 +59,29 @@ input[type="file"] {
   width: 100%;
 }
 
+#right-section .list .person {
+  margin-bottom: 0 !important;
+}
+
+#right-section .list .person img {
+  display: none;
+}
+
+#right-section .list .row div {
+  padding-left: 0;
+}
+
+#right-section .list .movie {
+  height: 20px;
+}
+
+#right-section .list .movie img {
+  display: none !important;
+}
+
 #left-section {
   padding: 10px;
+  min-width: 270px;
 }
 
 .error-msg {
