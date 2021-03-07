@@ -1,7 +1,7 @@
 from flask_login import current_user
 from my_server import app
 from my_server.database import dbhandler as dbh, pers_movie_dbf as pmf
-from flask import Blueprint, request, url_for, redirect, render_template, abort
+from flask import Blueprint, request, render_template, abort
 import requests
 import json
 from itertools import islice

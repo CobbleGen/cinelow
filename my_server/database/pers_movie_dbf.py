@@ -177,7 +177,7 @@ def get_random_related_movies(user = None):
         m2 = get_movie(get_relevant_movie(not_seen))
     return m1, m2
 
-###   Not yet implemented or working
+###   Not yet implemented or working ###
 def get_random_related_movie(to_movie):
     #category_id = to_movie.categories[random.randint(1, len(to_movie.categories)-1)].category_id
     category_ids = [ i.category_id for i in to_movie.categories ]
@@ -278,7 +278,7 @@ def get_top_movies_by_person(person_id):
         .label('rank')
     )
     # now filter
-    query = query.filter(MoviePersonScores.person_id == person_id)
+    query = query.filter(MoviePersonScores.person_id == person_id).group_by(MoviePersonScores.movie_id)
     query = query.order_by(MoviePersonScores.person_id, 'rank')
     movies = query.all()
     return movies
