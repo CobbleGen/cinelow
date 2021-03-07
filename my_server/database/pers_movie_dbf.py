@@ -278,7 +278,7 @@ def get_top_movies_by_person(person_id):
         .label('rank')
     )
     # now filter
-    query = query.filter(MoviePersonScores.person_id == person_id).group_by(MoviePersonScores.movie_id)
+    query = query.filter(MoviePersonScores.person_id == person_id).group_by(MoviePersonScores.movie_id, MoviePersonScores.votes)
     query = query.order_by(MoviePersonScores.person_id, 'rank')
     movies = query.all()
     return movies
