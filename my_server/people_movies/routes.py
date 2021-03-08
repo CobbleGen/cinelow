@@ -85,7 +85,11 @@ def getTopList():
         movies = pmf.get_user_recommendations(data_id, max_amount)
         return {'category': 'rec', 'movies': movies}
     movie_list = []
+    movie_ids = []
     for movie in islice(movies, max_amount):
+        if movie[0].movie_id in movie_ids:
+            continue
+        movie_ids.append(movie[0].movie_id)
         minfo = movie[0].movie.serialize
         movie_list.append((minfo, movie[0].score, movie[1], movie[0].votes))
     return {'category': category, 'movies': movie_list}
