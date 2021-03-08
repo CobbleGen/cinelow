@@ -214,16 +214,12 @@ function showScore(score, count, show) {
     switch (show) {
         case 1:
             return `#${count}`;
-            break;
         case 2:
             return score;
-            break;
         case 3:
             return `${score} #${count}`;
-            break;
         default:
             return "";
-            break;
     }
 }
 
@@ -259,9 +255,15 @@ function displayLists(movies, list, show, show_name, category) {
     }
 }
 
-function movieLists() {
-    $(".movie-list").each(function() {
+let movieLists = $(".movie-list");
+
+function renderMovieLists() {
+    let output = [];
+    $(movieLists).each(function() {
         list = $(this);
+        if($(window).scrollTop() < $(list).offset().top - $(window).height()) {
+            return false;
+        }
         type = list.data("type");
         data_id = list.data("id");
         amount = list.data("amount");
@@ -278,9 +280,17 @@ function movieLists() {
                 amount  : amount
             },
             success: function (response) {
+                console.log("Rendered " + type + " list with data of " + data_id);
                 displayLists(response.movies, list, show, show_name, response.category);
+                movieLists.splice(0, 1);
             }
         });
     });
+    return output;
 }
-movieLists()
+
+renderMovieLists();
+
+$(window).scroll(function() {
+    renderMovieLists();
+});

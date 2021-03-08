@@ -53,8 +53,9 @@ def compare():
 def toplist(ctype='category', tid='0'):
     return render_template('toplist.html', ctype=ctype, tid=tid)
 
-
-### START OF AJAX REQUESTS ###
+#-------------------------------------------------#
+#----------- START OF AJAX REQUESTS --------------#
+#-------------------------------------------------#
 
 @app.route('/_getmovies')
 def getMovs():
@@ -83,6 +84,18 @@ def getTopList():
         category = pmf.get_category(data_id).name
     elif request.args['type'] == 'recommended':
         movies = pmf.get_user_recommendations(data_id, max_amount)
+        return {'category': 'rec', 'movies': movies}
+    elif request.args['type'] == 'trending':
+        respons = requests.get('https://api.themoviedb.org/3/trending/movie/week?api_key=db254eee52d0c8fbc70d51368cd24644')
+        if respons.status_code != 200:
+            abort(404)
+        movies = json.loads(respons.text)['results']
+        return {'category': 'rec', 'movies': movies}
+    elif request.args['type'] == 'popular':
+        respons = requests.get('https://api.themoviedb.org/3/movie/popular?api_key=db254eee52d0c8fbc70d51368cd24644&language=en-US&page=1')
+        if respons.status_code != 200:
+            abort(404)
+        movies = json.loads(respons.text)['results']
         return {'category': 'rec', 'movies': movies}
     movie_list = []
     movie_ids = []

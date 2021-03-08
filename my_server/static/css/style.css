@@ -578,6 +578,7 @@ nav form i {
 
 .horiz-list {
   margin-bottom: 20px;
+  min-height: 180px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

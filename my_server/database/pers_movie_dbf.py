@@ -172,7 +172,6 @@ def get_random_related_movies(user = None):
     ids = [ r['id'] for r in json.loads(respons.text)['results']]
     m2 = Movie.query.filter(Movie.id.in_(ids), Movie.id.notin_(not_seen)).order_by(func.random()).first()
     if m2 == None:
-        print('No related found, taking random instead')
         not_seen.append(m1.id)
         m2 = get_movie(get_relevant_movie(not_seen))
     return m1, m2
@@ -418,5 +417,4 @@ def get_seen_movie(movie_id, user_id):
 
 def get_seen_movies(user_id, seen_value):
     movies = [ r.movie_id for r in MovieUserScores.query.with_entities(MovieUserScores.movie_id).filter(and_(MovieUserScores.user_id == user_id, MovieUserScores.seen == seen_value))]
-    print(movies)
     return movies

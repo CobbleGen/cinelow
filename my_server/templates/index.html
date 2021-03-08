@@ -8,17 +8,41 @@
     {% if current_user.is_authenticated %}
         <h3>Top Picks For You</h3>
         <div class="list horiz-list movie-list" data-type="recommended" data-id="{{current_user.id}}" data-amount="15" data-sname="0"></div>
+
+        <h3>Trending This Week</h3>
+        <div class="list horiz-list movie-list" data-type="trending" data-id="0" data-amount="15" data-sname="0"></div>
     {% endif %}
 
     <h3>Top Movies</h3>
     <div class="list horiz-list movie-list" data-type="category" data-id="0" data-amount="15" data-show_score="3" data-sname="0"></div>
 
+    {% if not current_user.is_authenticated %}
+        <h3>Trending This Week</h3>
+        <div class="list horiz-list movie-list" data-type="trending" data-id="0" data-amount="15" data-sname="0"></div>
+    {% endif %}
+
     {% if current_user.is_authenticated %}
-        <h3>Since you like {{fav_actor.name}}</h3>
-        <div class="list horiz-list movie-list" data-type="person" data-id="{{fav_actor.id}}" data-amount="15" data-sname="0"></div>
+        <h3>Since you like {{fav_actors[1].name}}</h3>
+        <div class="list horiz-list movie-list" data-type="person" data-id="{{fav_actors[1].id}}" data-amount="15" data-sname="0"></div>
     {% endif %}
 
     <h3>Top Dramas</h3>
     <div class="list horiz-list movie-list" data-type="category" data-id="18" data-amount="15" data-show_score="3" data-sname="0"></div>
+
+    <h3>Popular Movies Right Now</h3>
+    <div class="list horiz-list movie-list" data-type="popular" data-id="0" data-amount="15" data-sname="0"></div>
+
+    {% if current_user.is_authenticated %}
+        <h3>Since you like {{fav_actors[0].name}}</h3>
+        <div class="list horiz-list movie-list" data-type="person" data-id="{{fav_actors[0].id}}" data-amount="15" data-sname="0"></div>
+    {% endif %}
+    
+    <h3>Top Action Movies</h3>
+    <div class="list horiz-list movie-list" data-type="category" data-id="28" data-amount="15" data-show_score="3" data-sname="0"></div>
+
+    {% if current_user.is_authenticated %}
+        <h3>Since you like {{fav_actors[2].name}}</h3>
+        <div class="list horiz-list movie-list" data-type="person" data-id="{{fav_actors[2].id}}" data-amount="15" data-sname="0"></div>
+    {% endif %}
     
 {% endblock %}
