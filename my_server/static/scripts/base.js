@@ -289,7 +289,9 @@ function renderMovieLists() {
     return output;
 }
 
-renderMovieLists();
+window.onload =function() {
+    renderMovieLists();
+};
 
 $(window).scroll(function() {
     renderMovieLists();
