@@ -78,6 +78,10 @@ def get_user_total_votes(user_id):
         return int(votes/2)
     return 0
 
+def get_top_users_by_votes(amount):
+    list = db.session.query(MovieUserScores.user_id, func.sum(MovieUserScores.votes)/2).group_by(MovieUserScores.user_id).order_by(MovieUserScores.votes).limit(amount).all()
+    return list
+
 def get_fav_people(user_id, person_type = 0, amount = 10):
     movies = get_top_movies(user_id, 100)
     mentions = {}

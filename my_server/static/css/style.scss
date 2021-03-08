@@ -388,6 +388,23 @@ nav {
     }
  }
 
+ #index-middle {
+     display: flex;
+     min-height: 400px;
+     margin-top: 10px;
+     margin-bottom: 30px;
+    #index-compare {
+        text-align: center;
+        width: 50%;
+        h1 {
+            font-size: 5rem!important;
+        }
+        h2 {
+            font-size: 2rem!important;
+        }
+    }
+ }
+
  .register-box {
     padding: 8px;
     border-radius: 7px;
@@ -817,7 +834,7 @@ nav {
     }
 }
 
-@media screen and (max-width: 2000px) {
+@media screen and (max-width: 2300px) {
     nav {
         #navbar {
             width: 1400px;
@@ -920,6 +937,12 @@ nav {
             width: 100%!important;
             margin-left: 5px!important;
             margin-right: 5px!important;
+        }
+    }
+    #index-middle {
+        flex-flow: column;
+        #index-compare {
+            width: 100%;
         }
     }
     #compare-title {

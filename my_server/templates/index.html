@@ -3,6 +3,10 @@
 
 {% block title %}Cinelow{% endblock %}
 
+{% block head %}
+    <script defer src="{{ url_for('static', filename='scripts/compare.js') }}"></script>
+{% endblock %}
+
 
 {% block content %}
     {% if current_user.is_authenticated %}
@@ -11,14 +15,40 @@
 
         <h3>Trending This Week</h3>
         <div class="list horiz-list movie-list" data-type="trending" data-id="0" data-amount="15" data-sname="0"></div>
-    {% endif %}
+    {% else %}
+        <h3>Top Movies</h3>
+        <div class="list horiz-list movie-list" data-type="category" data-id="0" data-amount="15" data-show_score="3" data-sname="0"></div>
 
-    <h3>Top Movies</h3>
-    <div class="list horiz-list movie-list" data-type="category" data-id="0" data-amount="15" data-show_score="3" data-sname="0"></div>
-
-    {% if not current_user.is_authenticated %}
         <h3>Trending This Week</h3>
         <div class="list horiz-list movie-list" data-type="trending" data-id="0" data-amount="15" data-sname="0"></div>
+    {% endif %}
+
+    <div id="index-middle">
+        <div id="index-compare">
+            <a href="{{url_for('compare')}}"><h2>Which is better?  </h2></a>
+            <br />
+            <div id="poster-boxes">
+                <div class="movie">
+                    <div class="not-seen-btn tooltip" id="ns-movie1"><i class="far fa-eye-slash tooltip"><span class="tooltiptext"><a>Not seen?</a></span></i>
+                    </div>
+                    <div class="movie-box" id="movie1-box"></div>
+                    <h2 class="movie-name" id="name1"></h2>
+                </div>
+                <div id="vs-box"><h1>VS</h1></div>
+                <div class="movie">
+                    <div class="not-seen-btn" id="ns-movie2"><i class="far fa-eye-slash tooltip"><span class="tooltiptext"><a>Not seen?</a></span></i>
+                        
+                    </div>
+                    <div class="movie-box" id="movie2-box"></div>
+                    <h2 class="movie-name" id="name2"></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if not current_user.is_authenticated %}
+        <h3>Top Movies</h3>
+        <div class="list horiz-list movie-list" data-type="category" data-id="0" data-amount="15" data-show_score="3" data-sname="0"></div>
     {% endif %}
 
     {% if fav_actors|length >= 2 %}

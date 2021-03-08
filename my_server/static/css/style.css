@@ -468,6 +468,28 @@ nav form i {
   font-size: 1.2rem;
 }
 
+#index-middle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  min-height: 400px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+#index-middle #index-compare {
+  text-align: center;
+  width: 50%;
+}
+
+#index-middle #index-compare h1 {
+  font-size: 5rem !important;
+}
+
+#index-middle #index-compare h2 {
+  font-size: 2rem !important;
+}
+
 .register-box {
   padding: 8px;
   border-radius: 7px;
@@ -957,7 +979,7 @@ nav form i {
   }
 }
 
-@media screen and (max-width: 2000px) {
+@media screen and (max-width: 2300px) {
   nav #navbar {
     width: 1400px;
   }
@@ -1045,6 +1067,15 @@ nav form i {
     width: 100% !important;
     margin-left: 5px !important;
     margin-right: 5px !important;
+  }
+  #index-middle {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: column;
+            flex-flow: column;
+  }
+  #index-middle #index-compare {
+    width: 100%;
   }
   #compare-title {
     margin-top: -2rem;
