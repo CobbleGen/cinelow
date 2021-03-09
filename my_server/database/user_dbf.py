@@ -3,6 +3,7 @@ from .dbhandler import User, MovieUserScores
 import my_server.database.pers_movie_dbf as pmf
 from flask_login import current_user
 from sqlalchemy.sql import func
+from sqlalchemy import desc
 import secrets
 from PIL import Image
 import os
@@ -79,7 +80,8 @@ def get_user_total_votes(user_id):
     return 0
 
 def get_top_users_by_votes(amount):
-    list = db.session.query(MovieUserScores.user_id, func.sum(MovieUserScores.votes)/2).group_by(MovieUserScores.user_id).order_by(MovieUserScores.votes).limit(amount).all()
+    list = db.session.query(MovieUserScores.user_id, (func.sum(MovieUserScores.votes)/2).label('totalvotes'))\
+        .group_by(MovieUserScores.user_id).order_by(desc('totalvotes')).limit(amount).all()
     return list
 
 def get_fav_people(user_id, person_type = 0, amount = 10):

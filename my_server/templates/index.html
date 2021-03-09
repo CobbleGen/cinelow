@@ -44,6 +44,22 @@
                 </div>
             </div>
         </div>
+
+        <div id="index-user-toplist">
+            <div id="toplist-titles">
+                <h2>User Toplist</h2>
+                <h3>Votes:</h3>
+            </div>
+            <div id="user-toplist">
+                {% for user in top_users %}
+                    <div class="top-user">
+                        <img src="{{url_for('static', filename='profilepics/' + user[0].image_file)}}" alt="">
+                        <a href="{{url_for('user', uname=user[0].username)}}"><h3>{{user[0].username}}</h3></a>
+                        <h4 class="top-vote">{{user[1]}}</h4>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
     {% if not current_user.is_authenticated %}

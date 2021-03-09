@@ -12,6 +12,14 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(30), nullable = False, default='default.jpg')
     movie_scores = relationship("MovieUserScores", back_populates="user")
 
+    @property
+    def serialize(self):
+        return {
+            'id'        : self.id,
+            'username'  : self.username,
+            'image_file': self.image_file
+        }
+
     def __repr__(self):
         return f'User: {self.username}'
 

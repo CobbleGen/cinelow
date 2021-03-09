@@ -390,10 +390,13 @@ nav {
 
  #index-middle {
      display: flex;
+     justify-content: space-between;
      min-height: 400px;
      margin-top: 10px;
      margin-bottom: 30px;
+
     #index-compare {
+        margin-top: 15px;
         text-align: center;
         width: 50%;
         h1 {
@@ -401,6 +404,35 @@ nav {
         }
         h2 {
             font-size: 2rem!important;
+        }
+    }
+
+    #index-user-toplist {
+        width: 40%;
+
+
+        #toplist-titles {
+            display: flex;
+            justify-content: space-between;
+            padding-right: 10px;
+        }
+
+        .top-user {
+            position: relative;
+            margin-bottom: 5px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+
+            img {
+                border-radius: 50%;
+                height: 70px;
+                margin-right: 15px;
+            }
+            .top-vote {
+                position: absolute;
+                right: 0;
+            }
         }
     }
  }
