@@ -505,7 +505,9 @@ nav form i {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding-right: 10px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 #index-middle #index-user-toplist .top-user {
@@ -1116,6 +1118,11 @@ nav form i {
             flex-flow: column;
   }
   #index-middle #index-compare {
+    width: 100%;
+  }
+  #index-middle #index-user-toplist {
+    margin-top: 30px;
+    padding-right: 15px;
     width: 100%;
   }
   #compare-title {
