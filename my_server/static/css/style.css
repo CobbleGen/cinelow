@@ -476,12 +476,11 @@ nav form i {
       -ms-flex-pack: justify;
           justify-content: space-between;
   min-height: 400px;
-  margin-top: 10px;
+  margin-top: 25px;
   margin-bottom: 30px;
 }
 
 #index-middle #index-compare {
-  margin-top: 15px;
   text-align: center;
   width: 50%;
 }
@@ -492,6 +491,10 @@ nav form i {
 
 #index-middle #index-compare h2 {
   font-size: 2rem !important;
+}
+
+#index-middle #index-compare #compare-title h1 {
+  font-size: 4rem !important;
 }
 
 #index-middle #index-user-toplist {

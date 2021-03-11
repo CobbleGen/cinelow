@@ -392,11 +392,10 @@ nav {
      display: flex;
      justify-content: space-between;
      min-height: 400px;
-     margin-top: 10px;
+     margin-top: 25px;
      margin-bottom: 30px;
 
     #index-compare {
-        margin-top: 15px;
         text-align: center;
         width: 50%;
         h1 {
@@ -404,6 +403,12 @@ nav {
         }
         h2 {
             font-size: 2rem!important;
+        }
+
+        #compare-title {
+            h1 {
+                font-size: 4rem!important;
+            }
         }
     }
 

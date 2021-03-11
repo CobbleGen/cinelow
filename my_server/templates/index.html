@@ -25,7 +25,11 @@
 
     <div id="index-middle">
         <div id="index-compare">
-            <a href="{{url_for('compare')}}"><h2>Which is better?  </h2></a>
+            <a href="{{url_for('compare')}}">
+                <div id="compare-title">
+                    <h1>Which is better?  </h1> <i id="q-icon" class="far fa-question-circle tooltip"><span id="common-tt" class="tooltiptext tooltip-bot"></span></i>
+                </div>
+            </a>
             <br />
             <div id="poster-boxes">
                 <div class="movie">
@@ -62,7 +66,7 @@
         </div>
     </div>
 
-    {% if not current_user.is_authenticated %}
+    {% if current_user.is_authenticated %}
         <h3>Top Movies</h3>
         <div class="list horiz-list movie-list" data-type="category" data-id="0" data-amount="15" data-show_score="3" data-sname="0"></div>
     {% endif %}

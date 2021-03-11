@@ -16,6 +16,9 @@ from itertools import islice
 
 tmdb_key = 'db254eee52d0c8fbc70d51368cd24644'
 
+def biased_random_number(min, max, bias):
+    return min + (max - min) * pow(random.uniform(0, 1), bias)
+
 #-------------------------------------------------#
 #------------GET / ADD FUNCTIONS -----------------#
 #-------------------------------------------------#
@@ -146,9 +149,7 @@ def get_common_people(movie1, movie2):
 
 def get_relevant_movie(except_for = []):
     most_watched = get_most_watched_movies(except_for)
-    max_x = math.sqrt(len(most_watched)*10)
-    rand_x = random.uniform(0, max_x)
-    list_id = math.trunc((rand_x**2)*0.1)
+    list_id = math.trunc(biased_random_number(0, len(most_watched), 4))
     return most_watched[list_id][0]
 
 def get_random_related_movies(user = None):
