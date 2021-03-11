@@ -4,7 +4,17 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/moviestyle.css') }}">
 {% endblock %}
 
-{% block title %}{{movie['title']}}{% endblock %}
+{% block title %}{{movie['title']}} {% if categories[0][4] %} - {{ categories[0][2] | int}} {% endif %} {% endblock %}
+
+{% block head %}
+    <meta name="description" content="{{movie.overview}}">
+    <meta name="image" content="https://image.tmdb.org/t/p/w300_and_h450_bestv2{{movie.poster_path}}">
+    <meta name="og:title" content="{{movie['title']}} {% if categories[0][4] %} - {{ categories[0][2] | int}} {% endif %}">
+    <meta name="og:type" content="video.movie">
+    <meta name="og:description" content="{{movie.overview}}">
+    <meta name="og:image" content="https://image.tmdb.org/t/p/w300_and_h450_bestv2{{movie.poster_path}}">
+    <meta name="og:url" content="{{url_for('moviePage', movie_id=movie.id)}}">
+{% endblock %}
 
 
 {% block content %}

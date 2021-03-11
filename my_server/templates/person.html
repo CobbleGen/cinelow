@@ -6,6 +6,16 @@
 
 {% block title %}{{person['name']}}{% endblock %}
 
+{% block head %}
+    <meta name="description" content="{{person['biography']}}">
+    <meta name="image" content="https://image.tmdb.org/t/p/w300_and_h450_bestv2{{person['profile_path']}}">
+    <meta name="og:title" content="{{person['name']}}">
+    <meta name="og:type" content="video.movie">
+    <meta name="og:description" content="{{person['biography']}}">
+    <meta name="og:image" content="https://image.tmdb.org/t/p/w300_and_h450_bestv2{{movie.poster_path}}">
+    <meta name="og:url" content="{{url_for('personPage', person_id=person['id'])}}">
+{% endblock %}
+
 
 {% block content %}
     <div id="headers">

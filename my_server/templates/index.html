@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 
 
-{% block title %}Cinelow{% endblock %}
+{% block title %}Cinelow - Comparative Movie Ratings{% endblock %}
 
 {% block head %}
     <script defer src="{{ url_for('static', filename='scripts/compare.js') }}"></script>
+    <meta name="description" content="Cinelow is a completely objective movie rating site, free of abstract voting systems. Compare movies and find new ones!">
+    <meta name="og:title" content="Cinelow - Comparative Movie Ratings">
+    <meta name="og:description" content="Cinelow is a completely objective movie rating site, free of abstract voting systems. Compare movies and find new ones!">
+    <meta name="og:type" content="website">
+    <meta name="og:image" content="{{ url_for('static', filename='images/cinelow_text.png') }}">
+    <meta name="og:url" content="https://www.cinelow.com/">
 {% endblock %}
 
 
