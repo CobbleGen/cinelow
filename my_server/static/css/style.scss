@@ -414,33 +414,32 @@ nav {
 
     #index-user-toplist {
         width: 40%;
-
-
-        #toplist-titles {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .top-user {
-            position: relative;
-            margin-bottom: 5px;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-
-            img {
-                border-radius: 50%;
-                height: 70px;
-                margin-right: 15px;
-            }
-            .top-vote {
-                position: absolute;
-                right: 0;
-            }
-        }
     }
- }
+}
+
+#toplist-titles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-user {
+    position: relative;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+
+    img {
+        border-radius: 50%;
+        height: 70px;
+        margin-right: 15px;
+    }
+    .top-vote {
+        position: absolute;
+        right: 0;
+    }
+}
 
  .register-box {
     padding: 8px;

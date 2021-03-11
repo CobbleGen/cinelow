@@ -501,7 +501,7 @@ nav form i {
   width: 40%;
 }
 
-#index-middle #index-user-toplist #toplist-titles {
+#toplist-titles {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -513,7 +513,7 @@ nav form i {
           align-items: center;
 }
 
-#index-middle #index-user-toplist .top-user {
+.top-user {
   position: relative;
   margin-bottom: 5px;
   margin-top: 10px;
@@ -525,13 +525,13 @@ nav form i {
           align-items: center;
 }
 
-#index-middle #index-user-toplist .top-user img {
+.top-user img {
   border-radius: 50%;
   height: 70px;
   margin-right: 15px;
 }
 
-#index-middle #index-user-toplist .top-user .top-vote {
+.top-user .top-vote {
   position: absolute;
   right: 0;
 }

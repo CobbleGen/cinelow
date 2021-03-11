@@ -92,3 +92,11 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     return render_template('account.html', form = form)
+
+@app.route('/usertoplist')
+def usertoplist():
+    user_toplist = uf.get_top_users_by_votes(30)
+    top_users = []
+    for id in user_toplist:
+        top_users.append((uf.getUserById(id[0]).serialize, id[1]))
+    return render_template('userstoplist.html', top_users=top_users)
