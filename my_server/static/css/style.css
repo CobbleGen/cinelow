@@ -229,14 +229,20 @@ nav form i {
 }
 
 #outer-block {
+  min-height: 100vh;
   width: 100%;
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  padding-bottom: 100px;
 }
 
 #main-block {
@@ -466,6 +472,34 @@ nav form i {
 
 #main-block #main-menu .item p {
   font-size: 1.2rem;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  background-color: #1A1A1A;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  padding: 7px;
+}
+
+footer #foot-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+}
+
+footer #foot-list a {
+  margin: 3px;
 }
 
 #index-middle {

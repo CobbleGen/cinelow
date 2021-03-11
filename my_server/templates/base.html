@@ -57,13 +57,21 @@
                     <a href="{{url_for('compare')}}" id="menu-comp"> <div class="item"> <p>COMPARE</p> </div> </a>
                     <a href="#"> <div class="item"> <p>DISCOVER</p> </div> </a>
                     <a href="{{url_for('toplist')}}"> <div class="item"> <p>TOP MOVIES</p> </div> </a>
-                    <a href="#"> <div class="item"> <p>TOP ACTORS</p> </div> </a>
-                    <a href="#"> <div class="item"> <p>TOP DIRECTORS</p> </div> </a>
+                    <!-- <a href="#"> <div class="item"> <p>TOP ACTORS</p> </div> </a>
+                    <a href="#"> <div class="item"> <p>TOP DIRECTORS</p> </div> </a> -->
                 </div>
 
                 {% block content %}
                 {% endblock %}
             </section>
+
+            <footer>
+                <div id="foot-list">
+                    <a>About</a>
+                    <a href="">Contact</a>
+                    <a>Privacy</a>
+                </div>
+            </footer>
         </section>
     </body>
 </html>
