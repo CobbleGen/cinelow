@@ -139,6 +139,10 @@ def get_common_people(movie1, movie2):
         people.append(person.serialize)
     return people
 
+def get_movie_amount():
+    rows = db.session.query(Movie).count()
+    return rows
+
 
 
 
@@ -361,6 +365,9 @@ def get_user_score(movie_id, user_id):
     db.session.commit()
     return a
 
+def get_max_score():
+    score = db.session.query(MovieCategoryScores.score).filter(MovieCategoryScores.category_id == 0).order_by(desc(MovieCategoryScores.score)).limit(1).first()[0]
+    return int(score)
 
 
 

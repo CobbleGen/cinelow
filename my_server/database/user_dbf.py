@@ -44,6 +44,9 @@ def save_picture(form_picture):
     i.save(picture_path)
     current_user.image_file = picture_name
 
+def get_total_users():
+    rows = db.session.query(User).count()
+    return rows
 
 
 
@@ -103,3 +106,7 @@ def get_fav_people(user_id, person_type = 0, amount = 10):
                 break
     toplist.remove((0,0))
     return toplist[0:amount]
+
+def total_user_votes():
+    votes = db.session.query(func.sum(MovieUserScores.votes)).first()[0]/2
+    return int(votes)

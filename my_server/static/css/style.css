@@ -98,6 +98,18 @@ input[type=checkbox] {
   background: #242424;
 }
 
+li {
+  list-style: none;
+  margin-bottom: 15px;
+}
+
+li ::before {
+  content: ">";
+  color: #ebd620;
+  margin-left: -15px;
+  margin-right: 5px;
+}
+
 nav {
   height: 50px;
   background-color: #1A1A1A;
@@ -242,13 +254,13 @@ nav form i {
   -webkit-box-direction: normal;
       -ms-flex-flow: column;
           flex-flow: column;
-  padding-bottom: 100px;
 }
 
 #main-block {
   position: relative;
   width: 1100px;
   margin-top: 30px;
+  padding-bottom: 120px;
 }
 
 #main-block .hidden-dropdown {

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Top Movies{% endblock %}
+
+
+{% block content %}
+    <h1>What is Cinelow?</h1>
+
+    <div id="index-middle">
+        <div style="width: 50%;">
+            <a>Cinelow is meant to be a completely objective movie rating site, free of abstract voting systems.
+                All scores on the site is based on the outcome of users playing the "compare game". 
+                A user gets two movies to pick from and is supposed to choose the one they find to be better.
+                It is completely up to them what "better" means, but if hovering the (?) symbol they will be able to see which attributes the two movies share.
+            </a>
+            <br />
+            <br />
+            <a>The idea is that comparing two movies together is less abstract than rating a single movie from 1-10, and the combination of all comparisons should add up to a more accurate rating and toplist.</a>
+
+        </div>
+        <div style="width: 40%;">
+            <h2>Stats:</h2>
+            <br>
+            <ul>
+                <li>
+                     <a>Cinelow hosts {{movies}} films</a>
+                </li>
+                <li>
+                    <a>Cinelow has {{users}} users</a>
+                </li>
+                <li>
+                    <a>Users have voted a total of {{votes}} times</a>
+                </li>
+                <li>
+                    <a>Highest score is {{max_score}}</a>
+               </li>
+            </ul>    
+        </div>
+    </div>
+
+{% endblock %}
