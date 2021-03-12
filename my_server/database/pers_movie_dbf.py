@@ -152,9 +152,19 @@ def get_movie_amount():
 #-------------------------------------------------#
 
 def get_relevant_movie(except_for = []):
-    most_watched = get_most_watched_movies(except_for)
+    most_watched = get_most_watched_movies(except_for, 1000)
     list_id = math.trunc(biased_random_number(0, len(most_watched), 4))
     return most_watched[list_id][0]
+
+def get_close_movie(movie_id, range = 100):
+    movie_score = db.session.query(MovieCategoryScores.score)\
+        .filter(MovieCategoryScores.movie_id==movie_id, MovieCategoryScores.category_id==0).first()[0]
+    min = movie_score - range/2
+    max = movie_score + range/2
+    close = MovieCategoryScores.query.\
+        filter(MovieCategoryScores.category_id==0, MovieCategoryScores.score.between(min, max), MovieCategoryScores.movie_id!=movie_id)\
+            .order_by(func.random()).first()
+    return close.movie
 
 def get_random_related_movies(user = None):
     not_seen = []
@@ -163,7 +173,7 @@ def get_random_related_movies(user = None):
         seen = get_seen_movies(user.id, 1)
         top_movs = uf.get_top_movies(user.id)
         prospects = seen + top_movs
-        rand_index = random.randint(0, math.trunc((1.35*len(prospects))+7))
+        rand_index = random.randint(0, math.trunc((1.35*len(prospects))+15))
         if rand_index < len(prospects):
             movie_id = prospects[rand_index]
         else:
@@ -171,14 +181,16 @@ def get_random_related_movies(user = None):
     else:
         movie_id = get_relevant_movie()
     m1 = Movie.query.filter(Movie.id==movie_id).first()
+    if random.randrange(0, 5) < 2:
+        m2 = get_close_movie(m1.id)
+        return m1, m2
     respons = requests.get('https://api.themoviedb.org/3/movie/' + str(m1.id) + '/recommendations?api_key=' + tmdb_key + '&language=en-US&page=' + random.choices("12", cum_weights=(0.65, 1.00))[0])
     if respons.status_code != 200:
         return None
     ids = [ r['id'] for r in json.loads(respons.text)['results']]
     m2 = Movie.query.filter(Movie.id.in_(ids), Movie.id.notin_(not_seen)).order_by(func.random()).first()
     if m2 == None:
-        not_seen.append(m1.id)
-        m2 = get_movie(get_relevant_movie(not_seen))
+        m2 = get_close_movie(m1.id)
     return m1, m2
 
 ###   Not yet implemented or working ###
