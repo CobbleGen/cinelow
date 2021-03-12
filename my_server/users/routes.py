@@ -15,9 +15,12 @@ def login():
         return redirect(url_for('start'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = uf.getUserByEmail(form.email.data)
+        if '@' in form.email.data:
+            user = uf.getUserByEmail(form.email.data)
+        else:
+            user = uf.getUserByUname(form.email.data)
         if user == None:
-            flash(f'No user could be found with that email.', 'warning')
+            flash(f'No user could be found with that email or username.', 'warning')
         elif bcrypt.checkpw(form.password.data.encode('UTF-8'), user.password):
             login_user(user, remember=form.remember.data)
             return redirect(url_for('start'))

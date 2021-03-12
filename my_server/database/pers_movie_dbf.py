@@ -173,7 +173,7 @@ def get_random_related_movies(user = None):
         seen = get_seen_movies(user.id, 1)
         top_movs = uf.get_top_movies(user.id)
         prospects = seen + top_movs
-        rand_index = random.randint(0, math.trunc((1.35*len(prospects))+15))
+        rand_index = random.randint(0, math.trunc((1.4*len(prospects))+15))
         if rand_index < len(prospects):
             movie_id = prospects[rand_index]
         else:
