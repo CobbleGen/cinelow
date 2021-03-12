@@ -53,6 +53,18 @@ def compare():
 def toplist(ctype='category', tid='0'):
     return render_template('toplist.html', ctype=ctype, tid=tid)
 
+@app.route('/watch')
+def watch():
+    cats = pmf.get_all_categories()
+    return render_template('watch.html', cats=cats)
+
+
+
+
+
+
+
+
 #-------------------------------------------------#
 #----------- START OF AJAX REQUESTS --------------#
 #-------------------------------------------------#

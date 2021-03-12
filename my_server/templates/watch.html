@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+
+{% block title %}What to watch? - Cinelow{% endblock %}
+
+{% block head %}
+    <script defer src="{{ url_for('static', filename='scripts/watch.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/watchstyle.css') }}">
+    <meta name="description" content="Decide what movie to watch tonight with the What to watch? tool by Cinelow.">
+    <meta name="og:title" content="What to watch? - Cinelow">
+    <meta name="og:description" content="Decide what movie to watch tonight with the What to watch? tool by Cinelow">
+    <meta name="og:type" content="website">
+    <meta name="og:image" content="{{ url_for('static', filename='images/cinelow_text.png') }}">
+    <meta name="og:url" content="https://www.cinelow.com/watch">
+{% endblock %}
+
+
+
+{% block content %}
+    <h1>What to watch?</h1>
+    <div id="watch-wrapper">
+        <div id="watch-settings">
+            <h3>Categories:</h3>
+            <div id="category-list">
+                <div class="category-item" data-id="0" data-name="Any">
+                    <a>Any</a>
+                    <i class="fas fa-times list-remover"></i>
+                </div>
+            </div>
+            <div id="add-category" class="closed">
+                <i class="fas fa-plus" id="cat-button"></i>
+                <div id="list-of-cats">
+                    {% for cat in cats %}
+                        <div class="cat" id="cat-{{cat.id}}" data-id="{{cat.id}}" data-name="{{cat.name}}">
+                            <a>{{cat.name}}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div id="lower-wrapper">
+            <div id="movies-box">
+
+            </div>
+            <div id="users-box">
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

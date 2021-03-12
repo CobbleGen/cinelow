@@ -98,6 +98,11 @@ input[type=checkbox] {
   background: #242424;
 }
 
+::-webkit-scrollbar-corner {
+  background: rgba(0, 0, 0, 0);
+  display: none;
+}
+
 li {
   list-style: none;
   margin-bottom: 15px;

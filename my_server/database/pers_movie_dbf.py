@@ -143,6 +143,12 @@ def get_movie_amount():
     rows = db.session.query(Movie).count()
     return rows
 
+def get_all_categories():
+    cats = Category.query.all()
+    categories = []
+    for cat in cats:
+        categories.append(cat.serialize)
+    return categories
 
 
 

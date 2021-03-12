@@ -1,0 +1,113 @@
+#watch-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  width: 100%;
+}
+
+#watch-settings {
+  min-height: 63px;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-right: 60px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 70%;
+}
+
+#watch-settings #category-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+#watch-settings .category-item {
+  background-color: #1A1A1A;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#watch-settings .category-item i {
+  margin-left: 10px;
+  color: #949494;
+}
+
+#watch-settings .category-item i:hover {
+  cursor: pointer;
+  color: #ff4444;
+}
+
+#watch-settings #add-category {
+  position: absolute;
+  right: 0;
+  background-color: #1A1A1A;
+  border-radius: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#watch-settings #add-category i {
+  color: #ebd620;
+  font-size: 1.5rem;
+}
+
+#watch-settings #add-category i:hover {
+  cursor: pointer;
+  color: #ac9d1b;
+}
+
+#watch-settings #add-category #list-of-cats {
+  height: 95%;
+  display: none;
+  overflow-y: scroll;
+}
+
+#watch-settings #add-category #list-of-cats .cat {
+  padding: 4px;
+  width: 95%;
+  border-radius: 5px;
+}
+
+#watch-settings #add-category #list-of-cats .cat:hover {
+  cursor: pointer;
+  background-color: #242424;
+}
+
+#watch-settings .closed:hover {
+  cursor: pointer;
+  background-color: #242424 !important;
+}
+
+#lower-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 10px;
+}
+
+#movies-box {
+  width: 70%;
+  height: 70vh;
+  border: #1A1A1A 3px solid;
+  border-radius: 10px;
+}
+/*# sourceMappingURL=watchstyle.css.map */
