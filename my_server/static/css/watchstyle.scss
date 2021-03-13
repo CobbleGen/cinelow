@@ -94,3 +94,78 @@ $error-red: rgb(255, 68, 68);
     border: $sec-bg 3px solid;
     border-radius: 10px;
 }
+
+#users-box {
+    margin-left: 15px;
+    max-width: 30%;
+
+    #user-list {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+    
+    .user-prof {
+        position: relative;
+        img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            border: transparent 3px solid;
+        }
+
+        i {
+            font-size: 2.6rem;
+            position: absolute;
+            top: 25%;
+            right: 35%;
+            opacity: 0;
+            color: $error-red;
+            transition: all 0.3s ease;
+        }
+        &:hover > i{
+            opacity: 100%;
+        }
+        &:hover > img{
+            opacity: 70%;
+            border: $error-red 3px solid;
+        }
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.user-search {
+    input[type=text] {
+        width: 20rem;
+    }
+}
+
+#user-search-results {
+    display: none;
+    background-color: $sec-bg;
+    min-height: 70px;
+    width: 19rem;
+    margin-top: -15px;
+    padding: 10px;
+    border-radius: 7px;
+    .searched-user {
+        align-items: center;
+        display: flex;
+        margin-top: 10px;
+        border-radius: 35px;
+        padding: 5px;
+        img {
+            margin-right: 5px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+        &:hover {
+            background-color: $hover-bg;
+            cursor: pointer;
+        }
+    }
+}

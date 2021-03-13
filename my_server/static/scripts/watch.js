@@ -1,4 +1,5 @@
 let categoryList = [];
+let usersList = [];
 
 $('.closed').click(function (e) { 
     if ($(this).hasClass("closed")) {
@@ -71,3 +72,82 @@ function redoClicks() {
     });
 }
 redoClicks();
+
+
+
+const uid = $(".user-prof").data("id");
+if (uid) {
+    usersList.push(uid);
+    $(".user-prof").click(function () {
+        usersList.splice(usersList.indexOf(uid), 1);
+        $(this).hide();
+    });
+}
+
+
+//Visa sökrutan om det står något i sökfältet när det klickas
+$("#user-search").focus(function (e) { 
+    if ($(this).val() != "") {
+        $("#user-search-results").show();
+    }
+});
+
+//Fokuserad på sökfältet?
+$("#user-search").focusout(function (e) {
+    if ($("#user-search-results:hover").length == 0) {
+        $("#user-search-results").hide();
+    }
+});
+
+//Släpper en bokstav på sökfältet
+$("#user-search").keyup(function (e) { 
+    $("#user-search-results").show();
+    clearTimeout(timeout);
+    if ($("#user-search").val() == "") {
+        $("#user-search-results").hide();
+    } else {
+        timeout = setTimeout(function() {
+            //Get movie info based on search query
+            $.ajax({
+                type: "GET",
+                url: "/_search_user",
+                data: {
+                    query: $("#user-search").val()
+
+                },
+                dataType: "json",
+                success: function (response) {
+                    $("#user-search-results").empty();
+                    for (let i = 0; i < response.length; i++) {
+                        const e = response[i];
+                        newDiv = $("<div>").html(`
+                            <div class="searched-user" data-id="${e.id} data-image="${e.image_file}">
+                                <img src="/static/profilepics/${e.image_file}" alt="user-img">
+                                <a>${e.username}</a>
+                            </div>
+                        `).click(function() {
+                            if (!(usersList.indexOf(e.id) >= 0)) {
+                                $("#user-list").append( newDiv = $("<div>").html(`
+                                    <div class="user-prof" data-id="${e.id}">
+                                        <img src="/static/profilepics/${e.image_file}" alt="user-img">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                `).click(function () {
+                                    usersList.splice(usersList.indexOf(e.id), 1);
+                                    $(this).hide();
+                                }));
+                                usersList.push(e.id);
+                            }
+                        });
+                        $("#user-search-results").append(newDiv);
+                        
+                    }
+                }
+            });
+        }, 150);
+    }
+});
+
+function generateNewMovies() {
+    
+}

@@ -15,7 +15,6 @@ $("#menu-bars").click(function (e) {
     $("#main-menu").slideDown().focus();
 });
 $(".hidden-dropdown").on("blur", function(e) {
-    console.log("lost focus");
     setTimeout(() => {
         $(this).slideUp();
     }, 100);
@@ -82,7 +81,6 @@ $("#search").keyup(function (e) {
 
                             while (current < (arr1.length + arr2.length) && current < 20) {
                                 if (arr2.length < 1 || arr1.length < 1) {
-                                    console.log(arr1);
                                     merged = merged.concat(arr1);
                                     merged = merged.concat(arr2);
                                     break;
@@ -96,7 +94,6 @@ $("#search").keyup(function (e) {
                                 }
                                 current++;
                             }
-                            console.log(merged);
                             $("#search-results").empty();
                             //console.log(merged);
                             let newDiv = null;

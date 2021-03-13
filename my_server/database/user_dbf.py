@@ -48,6 +48,14 @@ def get_total_users():
     rows = db.session.query(User).count()
     return rows
 
+def search_user(query):
+    users = User.query.filter(User.username.contains(query)).all()
+    out_users = []
+    for user in users:
+        out_users.append(user.serialize)
+    return out_users
+
+
 
 
 

@@ -204,7 +204,7 @@ nav a:hover {
   cursor: pointer;
 }
 
-nav form {
+.searchbar {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -220,29 +220,32 @@ nav form {
   width: fit-content;
 }
 
-nav form input[type=text] {
+.searchbar input[type=text] {
   padding: 6px;
   font-size: 1rem;
   font-family: Roboto;
   border: none;
   position: relative;
-  width: 30rem;
   border-radius: 15px;
   outline: none;
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
 
-nav form input[type=text]:focus {
-  width: 40rem;
-}
-
-nav form i {
+.searchbar i {
   position: absolute;
   right: 10px;
   color: #1A1A1A;
   font-size: 1.5rem;
   pointer-events: none;
+}
+
+.navsearch input[type=text] {
+  width: 30rem;
+}
+
+.navsearch input[type=text]:focus {
+  width: 40rem;
 }
 
 #outer-block {

@@ -110,4 +110,93 @@
   border: #1A1A1A 3px solid;
   border-radius: 10px;
 }
+
+#users-box {
+  margin-left: 15px;
+  max-width: 30%;
+}
+
+#users-box #user-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+#users-box .user-prof {
+  position: relative;
+}
+
+#users-box .user-prof img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  border: transparent 3px solid;
+}
+
+#users-box .user-prof i {
+  font-size: 2.6rem;
+  position: absolute;
+  top: 25%;
+  right: 35%;
+  opacity: 0;
+  color: #ff4444;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+#users-box .user-prof:hover > i {
+  opacity: 100%;
+}
+
+#users-box .user-prof:hover > img {
+  opacity: 70%;
+  border: #ff4444 3px solid;
+}
+
+#users-box .user-prof:hover {
+  cursor: pointer;
+}
+
+.user-search input[type=text] {
+  width: 20rem;
+}
+
+#user-search-results {
+  display: none;
+  background-color: #1A1A1A;
+  min-height: 70px;
+  width: 19rem;
+  margin-top: -15px;
+  padding: 10px;
+  border-radius: 7px;
+}
+
+#user-search-results .searched-user {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 10px;
+  border-radius: 35px;
+  padding: 5px;
+}
+
+#user-search-results .searched-user img {
+  margin-right: 5px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+#user-search-results .searched-user:hover {
+  background-color: #242424;
+  cursor: pointer;
+}
 /*# sourceMappingURL=watchstyle.css.map */

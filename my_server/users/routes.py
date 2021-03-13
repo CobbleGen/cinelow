@@ -1,3 +1,4 @@
+import json
 from my_server.database.pers_movie_dbf import get_person
 from my_server import app
 from my_server.database import dbhandler as dbh, user_dbf as uf
@@ -103,3 +104,17 @@ def usertoplist():
     for id in user_toplist:
         top_users.append((uf.getUserById(id[0]).serialize, id[1]))
     return render_template('userstoplist.html', top_users=top_users)
+
+
+
+
+
+#-------------------------------------------------#
+#----------- START OF AJAX REQUESTS --------------#
+#-------------------------------------------------#
+
+@app.route('/_search_user')
+def searchUser():
+    query = request.args['query']
+    users = uf.search_user(query)
+    return json.dumps(users)

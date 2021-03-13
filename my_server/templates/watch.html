@@ -43,8 +43,24 @@
 
             </div>
             <div id="users-box">
-
+                <div id="user-list">
+                    {% if current_user.is_authenticated %}
+                        <div class="user-prof" data-id="{{current_user.id}}">
+                            <img src="{{url_for('static', filename='profilepics/' + current_user.image_file)}}" alt="user-img">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div id="user-adder-box">
+                    <form class="searchbar user-search">
+                        <input type="text" placeholder="Search for more users..." id="user-search" autocomplete="off">
+                        <i class="fa fa-search"></i>
+                    </form>
+                    <div id="user-search-results">
+                    </div>
+                </div>
             </div>
+            
         </div>
     </div>
 

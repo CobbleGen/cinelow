@@ -179,39 +179,44 @@ nav {
             cursor: pointer;
         }
     }
-
-    form {
-        display: flex;
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        width: fit-content;
-
-        input[type=text] {
-            padding: 6px;
-            font-size: 1rem;
-            font-family: Roboto;
-            border: none;
-            position: relative;
-            width: 30rem;
-            border-radius: 15px;
-            outline: none;
-            transition: all 0.4s ease;
-        }
-
-        input[type=text]:focus {
-            width: 40rem;
-        }
-
-        i {
-            position: absolute;
-            right: 10px;
-            color: $sec-bg;
-            font-size: 1.5rem;
-            pointer-events: none;
-        }
-    }
  }
+
+ .searchbar {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+
+    input[type=text] {
+        padding: 6px;
+        font-size: 1rem;
+        font-family: Roboto;
+        border: none;
+        position: relative;
+        border-radius: 15px;
+        outline: none;
+        transition: all 0.4s ease;
+    }
+
+    i {
+        position: absolute;
+        right: 10px;
+        color: $sec-bg;
+        font-size: 1.5rem;
+        pointer-events: none;
+    }
+}
+
+.navsearch {
+    input[type=text] {
+        width: 30rem;
+    }
+
+    input[type=text]:focus {
+        width: 40rem;
+    }
+}
 
 #outer-block {
     min-height: 100vh;
