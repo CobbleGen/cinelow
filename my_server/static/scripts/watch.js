@@ -175,7 +175,7 @@ function generateNewMovies() {
                 const movie = r[i];
                 $.ajax({
                     type: "GET",
-                    url: "http://api.themoviedb.org/3/movie/" + movie.id,
+                    url: "https://api.themoviedb.org/3/movie/" + movie.id,
                     data: {
                         api_key  : "db254eee52d0c8fbc70d51368cd24644"
                     },
