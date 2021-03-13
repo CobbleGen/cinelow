@@ -1,5 +1,5 @@
 from operator import and_
-from sqlalchemy.sql.elements import False_
+from sqlalchemy.sql.elements import False_, True_
 
 from sqlalchemy.sql.expression import insert
 from .. import db
@@ -119,6 +119,10 @@ def get_movie(id):
 def get_movie_categories(movie_id):
     categories = Movie.query.filter_by(id=movie_id).first().categories
     return categories
+
+def get_movie_category_ids(movie):
+    out = [ a.category_id for a in movie.categories ]
+    return out
 
 def get_common_categories(movie1, movie2):
     cats = db.session.query(MovieCategoryScores.category_id, func.sum(MovieCategoryScores.movie_id))\
@@ -263,6 +267,38 @@ def get_most_watched_movies(dont_include = [], limit = 300):
     result = db.session.query(mquery.c.movie_id, mquery.c.average)\
         .order_by(desc(mquery.c.average)).group_by(mquery.c.movie_id, mquery.c.average).limit(limit).all()
     return result
+
+
+def advanced_recommendations(user_ids = [], categories = [], not_seen = True, amount = 10):
+    all_seen = []
+    all_tops = []
+    for user_id in user_ids:
+        all_seen.extend(get_seen_movies(user_id, 1))
+        all_tops.extend(uf.get_top_movies(user_id, 10))
+    if not categories or -1 in categories: #If any category can be used:
+        related = get_related_movies(all_tops, all_seen, amount)
+        if len(related) < amount:
+            needed = amount-len(related)
+            most_watched = get_most_watched_movies([], needed)
+            related.extend(most_watched)
+        output = []
+        for m in related:
+            movie = get_movie(m[0])
+            output.append(movie.serialize)
+        return output
+    #If specific categories are requested:
+    related = get_related_movies(all_tops, all_seen, amount*5)
+    output = []
+    for m in related:
+        movie = get_movie(m[0])
+        if not set(get_movie_category_ids(movie)).isdisjoint(categories):
+            output.append(movie.serialize)
+    if len(output) < amount:
+        top_movs = get_top_movies_by_category(0)
+        for m in top_movs:
+            if not set(get_movie_category_ids(m[0].movie)).isdisjoint(categories):
+                output.append(m[0].movie.serialize)
+    return output
 
 
 

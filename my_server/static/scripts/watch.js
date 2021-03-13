@@ -3,12 +3,17 @@ let usersList = [];
 
 $('.closed').click(function (e) { 
     if ($(this).hasClass("closed")) {
-        $(this).animate({
+        console.log($('#add-category').attr('position'));
+        const animation = $('#add-category').css('position') == "absolute" ?{
             width: '300px',
             height: '400px',
             right: '-285px',
             top: '10px'
-        });
+        } : {
+            width: '300px',
+            height: '400px',
+        };
+        $(this).animate(animation);
         $(this).children("#list-of-cats").show();
         $(this).removeClass("closed");
         $(this).children("#cat-button").css({'transform' : 'rotate(-45deg)'})
@@ -16,12 +21,16 @@ $('.closed').click(function (e) {
 });
 
 function closeCategories() {
-    $("#add-category").animate({
+    const animation = $('#add-category').css('position') == "absolute" ?{
         width: '15',
         height: '23',
         right: '0',
-        top: '10px'
-    });
+    } : {
+        width: '15',
+        height: '23',
+        right: '0',
+    };
+    $("#add-category").animate(animation);
     $('#cat-button').css({'transform' : 'rotate(0deg)'})
     setTimeout(function() {
         $("#add-category").addClass("closed");
@@ -70,8 +79,8 @@ function redoClicks() {
         closeCategories();
         redoClicks();
     });
+    generateNewMovies();
 }
-redoClicks();
 
 
 
@@ -135,8 +144,10 @@ $("#user-search").keyup(function (e) {
                                 `).click(function () {
                                     usersList.splice(usersList.indexOf(e.id), 1);
                                     $(this).hide();
+                                    generateNewMovies();
                                 }));
                                 usersList.push(e.id);
+                                generateNewMovies();
                             }
                         });
                         $("#user-search-results").append(newDiv);
@@ -149,5 +160,44 @@ $("#user-search").keyup(function (e) {
 });
 
 function generateNewMovies() {
-    
+    $.ajax({
+        type: "POST",
+        url: "/_advanced_recommendations",
+        contentType: 'application/json',
+        data: JSON.stringify({
+            'user_ids' : usersList,
+            'category_ids': categoryList
+        }),
+        dataType: "JSON",
+        success: function (r) {
+            $("#movies-box").empty();
+            for (let i = 0; i < r.length; i++) {
+                const movie = r[i];
+                $.ajax({
+                    type: "GET",
+                    url: "http://api.themoviedb.org/3/movie/" + movie.id,
+                    data: {
+                        api_key  : "db254eee52d0c8fbc70d51368cd24644"
+                    },
+                    dataType: "JSON",
+                    success: function (response) {
+                        $("#movies-box").append(`
+                            <a href="/m/${movie.id}">
+                                <div class="rec-movie">
+                                    <img src="https://image.tmdb.org/t/p/w94_and_h141_bestv2${movie.poster_path}" alt="">
+                                    <h1>${movie.name}</h1>
+                                    <p>${response.overview}</p>
+                                </div>
+                            </a>
+                        `);
+                    }
+                });
+            }
+        },
+        error: function(r) {
+            console.error(r);
+        }
+    });
 }
+
+redoClicks();

@@ -136,3 +136,11 @@ def seenMovie():
     if current_user.is_authenticated:
         pmf.seen_movie(mid, current_user.id, seen)
     return 'Success'
+
+@app.route('/_advanced_recommendations',  methods=['GET', 'POST'])
+def advancedRec():
+    data = request.get_json()
+    user_ids = data['user_ids']
+    category_ids = data['category_ids']
+    recs = pmf.advanced_recommendations(user_ids, category_ids, True, 10)
+    return json.dumps(recs)

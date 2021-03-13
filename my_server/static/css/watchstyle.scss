@@ -51,6 +51,7 @@ $error-red: rgb(255, 68, 68);
         padding-left: 15px;
         padding-top: 10px;
         padding-bottom: 10px;
+        z-index: 5;
         i {
             color: $c-yellow;
             font-size: 1.5rem;
@@ -93,6 +94,33 @@ $error-red: rgb(255, 68, 68);
     height: 70vh;
     border: $sec-bg 3px solid;
     border-radius: 10px;
+    overflow-y: auto;
+    padding-right: 10px;
+    a {
+        width: 100%;
+    }
+
+    .rec-movie {
+        display: grid;
+        width: 100%;
+        grid-template-areas:    "img title"
+                                "img .";
+        grid-template-rows:    auto auto;
+        grid-template-columns: 110px auto;
+        padding: 5px;
+        img {
+            grid-area: img;
+            border-radius: 5px;
+
+        }
+        h1 {
+            grid-area: title;
+            font-size: 2rem;
+        }
+        p {
+            font-size: 1.25rem;
+        }
+    }
 }
 
 #users-box {
@@ -151,6 +179,7 @@ $error-red: rgb(255, 68, 68);
     margin-top: -15px;
     padding: 10px;
     border-radius: 7px;
+
     .searched-user {
         align-items: center;
         display: flex;
@@ -166,6 +195,33 @@ $error-red: rgb(255, 68, 68);
         &:hover {
             background-color: $hover-bg;
             cursor: pointer;
+        }
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    #watch-settings {
+        flex-flow: column;
+        align-items: flex-start;
+    }
+}
+
+@media screen and (max-width: 769px) {
+    #add-category {
+        position: relative!important;
+        margin-left: 10px;
+    }
+    #lower-wrapper {
+        flex-flow: column-reverse;
+
+        #movies-box {
+            width: 100%;
+        }
+
+        #users-box {
+            max-width: 100%;
+            width: 100%;
+            margin-bottom: 20px;
         }
     }
 }
