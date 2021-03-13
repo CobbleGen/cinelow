@@ -166,13 +166,14 @@ def get_relevant_movie(except_for = []):
     list_id = math.trunc(biased_random_number(0, len(most_watched), 4))
     return most_watched[list_id][0]
 
-def get_close_movie(movie_id, range = 100):
+def get_close_movie(movie_id, exclude = [], range = 100):
     movie_score = db.session.query(MovieCategoryScores.score)\
         .filter(MovieCategoryScores.movie_id==movie_id, MovieCategoryScores.category_id==0).first()[0]
     min = movie_score - range/2
     max = movie_score + range/2
+    exclude.append(movie_id)
     close = MovieCategoryScores.query.\
-        filter(MovieCategoryScores.category_id==0, MovieCategoryScores.score.between(min, max), MovieCategoryScores.movie_id!=movie_id)\
+        filter(MovieCategoryScores.category_id==0, MovieCategoryScores.score.between(min, max), MovieCategoryScores.movie_id.notin_(exclude))\
             .order_by(func.random()).first()
     return close.movie
 
@@ -192,7 +193,7 @@ def get_random_related_movies(user = None):
         movie_id = get_relevant_movie()
     m1 = Movie.query.filter(Movie.id==movie_id).first()
     if random.randrange(0, 5) < 2:
-        m2 = get_close_movie(m1.id)
+        m2 = get_close_movie(m1.id, not_seen)
         return m1, m2
     respons = requests.get('https://api.themoviedb.org/3/movie/' + str(m1.id) + '/recommendations?api_key=' + tmdb_key + '&language=en-US&page=' + random.choices("12", cum_weights=(0.65, 1.00))[0])
     if respons.status_code != 200:
@@ -200,7 +201,7 @@ def get_random_related_movies(user = None):
     ids = [ r['id'] for r in json.loads(respons.text)['results']]
     m2 = Movie.query.filter(Movie.id.in_(ids), Movie.id.notin_(not_seen)).order_by(func.random()).first()
     if m2 == None:
-        m2 = get_close_movie(m1.id)
+        m2 = get_close_movie(m1.id, not_seen)
     return m1, m2
 
 ###   Not yet implemented or working ###

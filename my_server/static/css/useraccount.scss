@@ -64,6 +64,10 @@ input[type="file"] {
         .row {
             div {
                 padding-left: 0;
+
+                h3 {
+                    color: $text-gray;
+                }
             }
         }
         .movie {
@@ -71,6 +75,7 @@ input[type="file"] {
             img {
                 display: none!important;
             }
+            
         }
     }
 }
